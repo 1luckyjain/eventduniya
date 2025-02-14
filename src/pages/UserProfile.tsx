@@ -1,26 +1,63 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { User, Ticket, Bell, Settings, LogOut } from 'lucide-react';
+import { useAuth } from '../context/auth-context';
+import axios from 'axios';
 
 function UserProfile() {
+  const auth = useAuth();
+  const user = auth.user;
+  
+  // Build basic profile info from the authenticated user.
   const userProfile = {
-    name: "Sarah Johnson",
-    email: "sarah@example.com",
+    name: user?.username || "Your Name",
+    email: user?.email || "you@example.com",
     joinDate: "January 2025",
-    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300",
-    upcomingEvents: [
-      {
-        title: "Symphony Under the Stars",
-        date: "July 15, 2025",
-        ticketId: "TK-2025071501"
-      },
-      {
-        title: "Jazz Night Fusion",
-        date: "July 20, 2025",
-        ticketId: "TK-2025072001"
-      }
-    ],
-    savedArtists: ["Elena Rodriguez", "Marcus Chen"]
+    avatar:
+      user?.avatar ||
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300",
+    savedArtists: user?.savedArtists || ["Elena Rodriguez", "Marcus Chen"],
   };
+
+  // State for upcoming events (booked events)
+  const [upcomingEvents, setUpcomingEvents] = useState<any[]>([]);
+  const userId = user?._id;
+
+  useEffect(() => {
+    async function fetchBookedEvents() {
+      try {
+        // 1. Fetch all events from the API.
+        const allEventsResponse = await axios.get(
+          'http://localhost:5000/api/events',
+          { withCredentials: true }
+        );
+        const allEvents = Array.isArray(allEventsResponse.data)
+          ? allEventsResponse.data
+          : [];
+
+        // 2. Fetch booked event IDs for the user.
+        const eventIdsResponse = await axios.post(
+          'http://localhost:5000/api/user/events',
+          { userId },
+          { withCredentials: true }
+        );
+        const bookedEventIds = Array.isArray(eventIdsResponse.data.eventIds)
+          ? eventIdsResponse.data.eventIds
+          : [];
+        console.log("Booked event IDs:", bookedEventIds);
+
+        // 3. Filter all events using the booked event IDs.
+        const filteredEvents = allEvents.filter((event: any) =>
+          bookedEventIds.includes(event._id)
+        );
+        setUpcomingEvents(filteredEvents);
+      } catch (error) {
+        console.error("Error fetching booked events:", error);
+      }
+    }
+    if (userId) {
+      fetchBookedEvents();
+    }
+  }, [userId]);
 
   return (
     <div className="bg-black min-h-screen py-20">
@@ -69,18 +106,22 @@ function UserProfile() {
             <div className="bg-gray-900 rounded-xl p-8">
               <h3 className="text-2xl font-bold mb-6">Upcoming Events</h3>
               <div className="space-y-4">
-                {userProfile.upcomingEvents.map((event, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 bg-gray-800 rounded-lg">
-                    <div>
-                      <h4 className="font-semibold">{event.title}</h4>
-                      <p className="text-gray-400">{event.date}</p>
-                      <p className="text-sm text-purple-500">Ticket ID: {event.ticketId}</p>
+                {upcomingEvents.length > 0 ? (
+                  upcomingEvents.map((event, index) => (
+                    <div key={index} className="flex items-center justify-between p-4 bg-gray-800 rounded-lg">
+                      <div>
+                        <h4 className="font-semibold">{event.title}</h4>
+                        <p className="text-gray-400">{new Date(event.date).toLocaleDateString()}</p>
+                        <p className="text-sm text-purple-500">Ticket ID: {event.ticketId}</p>
+                      </div>
+                      <button className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition">
+                        View Ticket
+                      </button>
                     </div>
-                    <button className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition">
-                      View Ticket
-                    </button>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <p className="text-gray-400">No upcoming events found.</p>
+                )}
               </div>
             </div>
 
@@ -106,7 +147,7 @@ function UserProfile() {
                 <div className="flex items-center justify-between">
                   <span>Email Notifications</span>
                   <label className="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" className="sr-only peer" checked />
+                    <input type="checkbox" className="sr-only peer" defaultChecked />
                     <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-800 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-500"></div>
                   </label>
                 </div>
