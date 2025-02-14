@@ -295,16 +295,16 @@ const App: React.FC = () => {
               <div>
                 <h4 className="font-semibold mb-4">Contact Info</h4>
                 <ul className="space-y-2 text-gray-400">
-                  <li>123 Art Street</li>
-                  <li>New York, NY 10001</li>
-                  <li>contact@eventduniya.com</li>
-                  <li>(555) 123-4567</li>
+                  <li>Jaipur</li>
+                  <li>Rajasthan,India</li>
+                  <li>eventduniyaa@gmail.com</li>
+                  <li>+91 8435308486</li>
                 </ul>
               </div>
               <div>
                 <h4 className="font-semibold mb-4">Follow Us</h4>
                 <div className="flex space-x-4">
-                  <a href="#" className="text-gray-400 hover:text-purple-500">
+                  <a href="https://www.instagram.com/eventduniyaofficial/" className="text-gray-400 hover:text-purple-500">
                     Instagram
                   </a>
                   <a href="#" className="text-gray-400 hover:text-purple-500">

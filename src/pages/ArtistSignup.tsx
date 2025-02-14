@@ -3,6 +3,11 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+// Update the import line at the top of the file
+import { 
+  Mail, Lock, User, MapPin, Phone, Tag, Video, Instagram, Twitter, Youtube, 
+  Facebook, Music, AlertCircle, ArrowRight  // Add AlertCircle here
+} from "lucide-react";
 
 import { useAuth } from "../context/auth-context";
 import { STATUS } from "../utils/utils";
@@ -110,366 +115,321 @@ const ArtistSignup: React.FC = () => {
       // Optionally, display an error message here
     }
   };
-
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4">
-      <div className="w-full max-w-3xl p-8 bg-white rounded-lg text-black shadow-md">
-        <h1 className="text-3xl font-bold text-center mb-6">Artist Signup</h1>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* Username */}
-          <div>
-            <label htmlFor="username" className="block mb-1 font-semibold">
-              Username
-            </label>
-            <input
-              type="text"
-              id="username"
-              placeholder="Username"
-              {...register("username", {
-                required: "Username is required.",
-                minLength: {
-                  value: 2,
-                  message: "Username must be at least 2 characters.",
-                },
-              })}
-              className="w-full p-3 border border-gray-300 rounded"
-            />
-            {errors.username && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.username.message}
-              </p>
-            )}
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto">
+        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+          {/* Header Section */}
+          <div className="bg-gradient-to-r from-purple-600 to-indigo-600 p-8 text-center">
+            <h1 className="text-4xl font-bold text-white mb-2">
+              Join Our EventDuniya
+            </h1>
+            <p className="text-purple-100 text-lg">
+              Showcase your talent to the world
+            </p>
           </div>
-          {/* Email */}
-          <div>
-            <label htmlFor="email" className="block mb-1 font-semibold">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              placeholder="Email"
-              {...register("email", {
-                required: "Email is required.",
-                pattern: {
-                  value:
-                    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                  message: "Enter a valid email address.",
-                },
-              })}
-              className="w-full p-3 border border-gray-300 rounded"
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.email.message}
-              </p>
-            )}
+
+          <div className="p-8 md:p-12">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              {/* Personal Info Grid */}
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-3">
+                    <User className="w-6 h-6 text-purple-600" />
+                    <h2 className="text-xl font-semibold">Personal Information</h2>
+                  </div>
+                  
+                  <InputField
+                    icon={<User size={18} className="text-gray-400" />}
+                    label="Username"
+                    id="username"
+                    register={register}
+                    error={errors.username}
+                    validation={{ required: true, minLength: 2 }}
+                    placeholder="ArtistName123"
+                  />
+
+                  <InputField
+                    icon={<Mail size={18} className="text-gray-400" />}
+                    label="Email"
+                    id="email"
+                    type="email"
+                    register={register}
+                    error={errors.email}
+                    validation={{ 
+                      required: true, 
+                      pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ 
+                    }}
+                    placeholder="artist@example.com"
+                  />
+                </div>
+
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-3">
+                    <Lock className="w-6 h-6 text-purple-600" />
+                    <h2 className="text-xl font-semibold">Security</h2>
+                  </div>
+
+                  <InputField
+                    icon={<Lock size={18} className="text-gray-400" />}
+                    label="Password"
+                    id="password"
+                    type="password"
+                    register={register}
+                    error={errors.password}
+                    validation={{ required: true, minLength: 6, maxLength: 30 }}
+                    placeholder="••••••••"
+                  />
+
+                  <InputField
+                    icon={<Lock size={18} className="text-gray-400" />}
+                    label="Confirm Password"
+                    id="confirmPassword"
+                    type="password"
+                    register={register}
+                    error={errors.confirmPassword}
+                    validation={{ required: true, validate: (value: string) => value === getValues("password") }}
+                    placeholder="••••••••"
+                  />
+                </div>
+              </div>
+
+              {/* Location Grid */}
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-3">
+                    <MapPin className="w-6 h-6 text-purple-600" />
+                    <h2 className="text-xl font-semibold">Location Details</h2>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <InputField
+                      label="City"
+                      id="city"
+                      register={register}
+                      error={errors.city}
+                      validation={{ required: true }}
+                      placeholder="e.g. New York"
+                    />
+
+                    <InputField
+                      label="State"
+                      id="state"
+                      register={register}
+                      error={errors.state}
+                      validation={{ required: true }}
+                      placeholder="e.g. New York"
+                    />
+                  </div>
+
+                  <InputField
+                    label="Country"
+                    id="country"
+                    register={register}
+                    error={errors.country}
+                    validation={{ required: true }}
+                    placeholder="e.g. United States"
+                  />
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <InputField
+                      label="Pincode"
+                      id="pincode"
+                      register={register}
+                      error={errors.pincode}
+                      validation={{ required: true }}
+                      placeholder="e.g. 10001"
+                    />
+
+                    <InputField
+                      icon={<Phone size={18} className="text-gray-400" />}
+                      label="Phone Number"
+                      id="phoneNumber"
+                      register={register}
+                      error={errors.phoneNumber}
+                      validation={{ required: true }}
+                      placeholder="+1 234 567 890"
+                    />
+                  </div>
+                </div>
+
+                {/* Artist Details */}
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-3">
+                    <Music className="w-6 h-6 text-purple-600" />
+                    <h2 className="text-xl font-semibold">Artist Profile</h2>
+                  </div>
+
+                  <InputField
+                    icon={<Tag size={18} className="text-gray-400" />}
+                    label="Tagline"
+                    id="tag"
+                    register={register}
+                    error={errors.tag}
+                    validation={{ required: true }}
+                    placeholder="e.g. Contemporary Painter"
+                  />
+
+                  <div className="relative">
+                    <label htmlFor="bio" className="block text-sm font-medium text-gray-700 mb-1">
+                      Bio
+                    </label>
+                    <textarea
+                      id="bio"
+                      {...register("bio", { required: true })}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      rows={4}
+                      placeholder="Describe your artistic journey..."
+                    />
+                    {errors.bio && <ErrorText message={errors.bio.message} />}
+                  </div>
+                </div>
+              </div>
+
+              {/* Video Links Section */}
+              <div className="space-y-4">
+                <div className="flex items-center space-x-3 border-b pb-2">
+                  <Video className="w-6 h-6 text-purple-600" />
+                  <h2 className="text-xl font-semibold">Portfolio Videos</h2>
+                </div>
+                
+                <InputField
+                  label="Video Link 1 (Required)"
+                  id="videoLink1"
+                  register={register}
+                  error={errors.videoLink1}
+                  validation={{ required: true }}
+                  placeholder="YouTube/Vimeo link"
+                />
+
+                <InputField
+                  label="Video Link 2 (Optional)"
+                  id="videoLink2"
+                  register={register}
+                  placeholder="YouTube/Vimeo link"
+                />
+
+                <InputField
+                  label="Video Link 3 (Optional)"
+                  id="videoLink3"
+                  register={register}
+                  placeholder="YouTube/Vimeo link"
+                />
+              </div>
+
+              {/* Social Media Section */}
+              <div className="space-y-4">
+                <div className="flex items-center space-x-3 border-b pb-2">
+                  <Instagram className="w-6 h-6 text-purple-600" />
+                  <h2 className="text-xl font-semibold">Social Profiles</h2>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  <InputField
+                    icon={<Instagram size={18} className="text-gray-400" />}
+                    label="Instagram"
+                    id="instagram"
+                    register={register}
+                    error={errors.instagram}
+                    validation={{ required: true }}
+                    placeholder="@yourhandle"
+                  />
+
+                  <InputField
+                    icon={<Twitter size={18} className="text-gray-400" />}
+                    label="Twitter (Optional)"
+                    id="twitter"
+                    register={register}
+                    placeholder="@yourhandle"
+                  />
+
+                  <InputField
+                    icon={<Youtube size={18} className="text-gray-400" />}
+                    label="YouTube (Optional)"
+                    id="youtube"
+                    register={register}
+                    placeholder="Channel URL"
+                  />
+
+                  <InputField
+                    icon={<Facebook size={18} className="text-gray-400" />}
+                    label="Facebook (Optional)"
+                    id="facebook"
+                    register={register}
+                    placeholder="Profile URL"
+                  />
+                </div>
+              </div>
+
+              {/* Submit Section */}
+              <div className="mt-8">
+                <button
+                  type="submit"
+                  className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-4 px-6 rounded-lg font-semibold hover:shadow-lg transition-all hover:scale-[1.02] flex items-center justify-center gap-2"
+                >
+                  <button className="w-5 h-5" />
+                  Complete Artist Registration
+                </button>
+
+                <p className="text-center text-gray-600 mt-4">
+                  Already have an account?{" "}
+                  <Link 
+                    to="/login" 
+                    className="text-purple-600 font-semibold hover:underline hover:text-purple-700"
+                  >
+                    Sign in here
+                  </Link>
+                </p>
+              </div>
+            </form>
           </div>
-          {/* Password */}
-          <div>
-            <label htmlFor="password" className="block mb-1 font-semibold">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              placeholder="Password"
-              {...register("password", {
-                required: "Password is required.",
-                minLength: {
-                  value: 6,
-                  message: "Password must be at least 6 characters.",
-                },
-                maxLength: {
-                  value: 30,
-                  message: "Password must be less than 30 characters.",
-                },
-              })}
-              className="w-full p-3 border border-gray-300 rounded"
-            />
-            {errors.password && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
-          {/* Confirm Password */}
-          <div>
-            <label htmlFor="confirmPassword" className="block mb-1 font-semibold">
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              id="confirmPassword"
-              placeholder="Confirm Password"
-              {...register("confirmPassword", {
-                required: "Confirm Password is required.",
-                validate: (value: string) =>
-                  value === getValues("password") ||
-                  "Passwords do not match.",
-              })}
-              className="w-full p-3 border border-gray-300 rounded"
-            />
-            {errors.confirmPassword && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.confirmPassword.message}
-              </p>
-            )}
-          </div>
-          {/* City */}
-          <div>
-            <label htmlFor="city" className="block mb-1 font-semibold">
-              City
-            </label>
-            <input
-              type="text"
-              id="city"
-              placeholder="City"
-              {...register("city", { required: "City is required." })}
-              className="w-full p-3 border border-gray-300 rounded"
-            />
-            {errors.city && (
-              <p className="text-red-500 text-sm mt-1">{errors.city.message}</p>
-            )}
-          </div>
-          {/* State */}
-          <div>
-            <label htmlFor="state" className="block mb-1 font-semibold">
-              State
-            </label>
-            <input
-              type="text"
-              id="state"
-              placeholder="State"
-              {...register("state", { required: "State is required." })}
-              className="w-full p-3 border border-gray-300 rounded"
-            />
-            {errors.state && (
-              <p className="text-red-500 text-sm mt-1">{errors.state.message}</p>
-            )}
-          </div>
-          {/* Country */}
-          <div>
-            <label htmlFor="country" className="block mb-1 font-semibold">
-              Country
-            </label>
-            <input
-              type="text"
-              id="country"
-              placeholder="Country"
-              {...register("country", { required: "Country is required." })}
-              className="w-full p-3 border border-gray-300 rounded"
-            />
-            {errors.country && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.country.message}
-              </p>
-            )}
-          </div>
-          {/* Pincode */}
-          <div>
-            <label htmlFor="pincode" className="block mb-1 font-semibold">
-              Pincode
-            </label>
-            <input
-              type="text"
-              id="pincode"
-              placeholder="Pincode"
-              {...register("pincode", { required: "Pincode is required." })}
-              className="w-full p-3 border border-gray-300 rounded"
-            />
-            {errors.pincode && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.pincode.message}
-              </p>
-            )}
-          </div>
-          {/* Phone Number */}
-          <div>
-            <label htmlFor="phoneNumber" className="block mb-1 font-semibold">
-              Phone Number
-            </label>
-            <input
-              type="text"
-              id="phoneNumber"
-              placeholder="Phone Number"
-              {...register("phoneNumber", {
-                required: "Phone Number is required.",
-              })}
-              className="w-full p-3 border border-gray-300 rounded"
-            />
-            {errors.phoneNumber && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.phoneNumber.message}
-              </p>
-            )}
-          </div>
-          {/* Tag */}
-          <div>
-            <label htmlFor="tag" className="block mb-1 font-semibold">
-              Tag
-            </label>
-            <input
-              type="text"
-              id="tag"
-              placeholder="Tag"
-              {...register("tag", { required: "Tag is required." })}
-              className="w-full p-3 border border-gray-300 rounded"
-            />
-            {errors.tag && (
-              <p className="text-red-500 text-sm mt-1">{errors.tag.message}</p>
-            )}
-          </div>
-          {/* Bio */}
-          <div>
-            <label htmlFor="bio" className="block mb-1 font-semibold">
-              Bio
-            </label>
-            <textarea
-              id="bio"
-              placeholder="Bio"
-              {...register("bio", { required: "Bio is required." })}
-              className="w-full p-3 border border-gray-300 rounded"
-            ></textarea>
-            {errors.bio && (
-              <p className="text-red-500 text-sm mt-1">{errors.bio.message}</p>
-            )}
-          </div>
-          {/* Video Link 1 */}
-          <div>
-            <label htmlFor="videoLink1" className="block mb-1 font-semibold">
-              Video Link 1
-            </label>
-            <input
-              type="text"
-              id="videoLink1"
-              placeholder="Video Link 1"
-              {...register("videoLink1", {
-                required: "Video Link 1 is required.",
-              })}
-              className="w-full p-3 border border-gray-300 rounded"
-            />
-            {errors.videoLink1 && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.videoLink1.message}
-              </p>
-            )}
-          </div>
-          {/* Video Link 2 (Optional) */}
-          <div>
-            <label htmlFor="videoLink2" className="block mb-1 font-semibold">
-              Video Link 2 (Optional)
-            </label>
-            <input
-              type="text"
-              id="videoLink2"
-              placeholder="Video Link 2"
-              {...register("videoLink2")}
-              className="w-full p-3 border border-gray-300 rounded"
-            />
-          </div>
-          {/* Video Link 3 (Optional) */}
-          <div>
-            <label htmlFor="videoLink3" className="block mb-1 font-semibold">
-              Video Link 3 (Optional)
-            </label>
-            <input
-              type="text"
-              id="videoLink3"
-              placeholder="Video Link 3"
-              {...register("videoLink3")}
-              className="w-full p-3 border border-gray-300 rounded"
-            />
-          </div>
-          {/* Instagram */}
-          <div>
-            <label htmlFor="instagram" className="block mb-1 font-semibold">
-              Instagram
-            </label>
-            <input
-              type="text"
-              id="instagram"
-              placeholder="Instagram"
-              {...register("instagram", {
-                required: "Instagram is required.",
-              })}
-              className="w-full p-3 border border-gray-300 rounded"
-            />
-            {errors.instagram && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.instagram.message}
-              </p>
-            )}
-          </div>
-          {/* Twitter (Optional) */}
-          <div>
-            <label htmlFor="twitter" className="block mb-1 font-semibold">
-              Twitter (Optional)
-            </label>
-            <input
-              type="text"
-              id="twitter"
-              placeholder="Twitter"
-              {...register("twitter")}
-              className="w-full p-3 border border-gray-300 rounded"
-            />
-          </div>
-          {/* YouTube (Optional) */}
-          <div>
-            <label htmlFor="youtube" className="block mb-1 font-semibold">
-              YouTube (Optional)
-            </label>
-            <input
-              type="text"
-              id="youtube"
-              placeholder="YouTube"
-              {...register("youtube")}
-              className="w-full p-3 border border-gray-300 rounded"
-            />
-          </div>
-          {/* Facebook (Optional) */}
-          <div>
-            <label htmlFor="facebook" className="block mb-1 font-semibold">
-              Facebook (Optional)
-            </label>
-            <input
-              type="text"
-              id="facebook"
-              placeholder="Facebook"
-              {...register("facebook")}
-              className="w-full p-3 border border-gray-300 rounded"
-            />
-          </div>
-          {/* TikTok (Optional) */}
-          <div>
-            <label htmlFor="tiktok" className="block mb-1 font-semibold">
-              TikTok (Optional)
-            </label>
-            <input
-              type="text"
-              id="tiktok"
-              placeholder="TikTok"
-              {...register("tiktok")}
-              className="w-full p-3 border border-gray-300 rounded"
-            />
-          </div>
-          {/* Submit Button */}
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white py-3 rounded hover:bg-blue-600 transition-colors"
-          >
-            Sign Up
-          </button>
-          <p className="text-center text-gray-600 mt-4">
-            Already have an account?{" "}
-            <Link className="text-blue-500 hover:underline" to="/login">
-              Login
-            </Link>
-          </p>
-        </form>
+        </div>
       </div>
     </div>
   );
 };
+
+// Reusable Input Component
+const InputField = ({
+  icon,
+  label,
+  id,
+  type = "text",
+  register,
+  error,
+  validation,
+  placeholder,
+}: any) => (
+  <div className="relative">
+    <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1">
+      {label}
+    </label>
+    <div className="relative">
+      {icon && (
+        <div className="absolute left-3 top-1/2 -translate-y-1/2">
+          {icon}
+        </div>
+      )}
+      <input
+        id={id}
+        type={type}
+        {...register(id, validation)}
+        placeholder={placeholder}
+        className={`w-full px-4 ${icon ? 'pl-10' : 'pl-4'} py-3 border ${
+          error ? 'border-red-500' : 'border-gray-300'
+        } rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent`}
+      />
+    </div>
+    {error && <ErrorText message={error.message} />}
+  </div>
+);
+
+//Error Message Component
+const ErrorText = ({ message }: { message?: string }) => (
+  <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+    <AlertCircle className="w-4 h-4" />
+    {message}
+  </p>
+);
 
 export default ArtistSignup;

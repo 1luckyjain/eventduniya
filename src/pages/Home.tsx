@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 
 function Home() {
   return (
-    <div>
+    <div className="min-h-screen bg-black">
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center">
+      <section className="relative h-[70vh] md:h-[90vh] flex items-center">
         <div 
           className="absolute inset-0 z-0"
           style={{
@@ -18,24 +18,24 @@ function Home() {
           <div className="absolute inset-0 bg-black/60"></div>
         </div>
         
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="max-w-3xl">
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+        <div className="container mx-auto px-4 md:px-6 relative z-10 text-center md:text-left">
+          <div className="max-w-2xl mx-auto md:max-w-3xl">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 md:mb-6 leading-snug md:leading-tight">
               Where Art Comes <span className="text-purple-500">Alive</span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-300 mb-8">
-              Experience the magic of live performances, art exhibitions, and cultural events in the heart of the city.
+            <p className="text-base md:text-xl lg:text-2xl text-gray-300 mb-6 md:mb-8 max-w-[600px] mx-auto md:mx-0">
+              Experience the magic of live performances, art exhibitions, and cultural events.
             </p>
-            <div className="flex space-x-4">
+            <div className="flex flex-col md:flex-row justify-center md:justify-start gap-3 md:gap-4">
               <Link 
                 to="/events"
-                className="bg-purple-500 text-white px-8 py-4 rounded-full font-semibold hover:bg-purple-600 transition flex items-center"
+                className="bg-purple-500 text-white px-5 py-3 md:px-8 md:py-4 rounded-full font-semibold hover:bg-purple-600 transition flex items-center justify-center gap-2 text-sm md:text-base"
               >
-                Explore Events <ArrowRight className="ml-2 h-5 w-5" />
+                Explore Events <ArrowRight className="h-4 w-4 md:h-5 md:w-5" />
               </Link>
               <Link 
                 to="/artist"
-                className="border border-white text-white px-8 py-4 rounded-full font-semibold hover:bg-white hover:text-black transition"
+                className="border border-white text-white px-5 py-3 md:px-8 md:py-4 rounded-full font-semibold hover:bg-white hover:text-black transition flex items-center justify-center text-sm md:text-base"
               >
                 Meet Artists
               </Link>
@@ -45,94 +45,49 @@ function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-black">
-        <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-3 gap-12">
-            {[
-              {
-                icon: <Music2 className="h-10 w-10 text-purple-500" />,
-                title: "Live Performances",
-                description: "Experience soul-stirring live music from world-renowned artists."
-              },
-              {
-                icon: <Users className="h-10 w-10 text-purple-500" />,
-                title: "Artist Showcases",
-                description: "Discover emerging talents and established artists in our curated showcases."
-              },
-              {
-                icon: <Calendar className="h-10 w-10 text-purple-500" />,
-                title: "Regular Events",
-                description: "Join our weekly events celebrating various art forms and cultures."
-              }
-            ].map((feature, index) => (
-              <div key={index} className="bg-gray-900 p-8 rounded-xl hover:transform hover:-translate-y-1 transition duration-300">
+      <section className="py-12 md:py-16 bg-black">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="grid gap-6 md:gap-8 md:grid-cols-3">
+            {[{
+              icon: <Music2 className="h-8 w-8 md:h-10 md:w-10 text-purple-500" />, 
+              title: "Live Performances",
+              description: "Experience soul-stirring live music from world-renowned artists."
+            }, {
+              icon: <Users className="h-8 w-8 md:h-10 md:w-10 text-purple-500" />, 
+              title: "Artist Showcases",
+              description: "Discover emerging talents and established artists in our curated showcases."
+            }, {
+              icon: <Calendar className="h-8 w-8 md:h-10 md:w-10 text-purple-500" />, 
+              title: "Regular Events",
+              description: "Join our weekly events celebrating various art forms and cultures."
+            }].map((feature, index) => (
+              <div key={index} className="bg-gray-900 p-5 md:p-8 rounded-xl hover:-translate-y-1 transition-transform">
                 <div className="mb-4">{feature.icon}</div>
-                <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
-                <p className="text-gray-400">{feature.description}</p>
+                <h3 className="text-lg md:text-xl font-semibold mb-2">{feature.title}</h3>
+                <p className="text-gray-400 text-sm md:text-base">{feature.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Featured Event */}
-      <section className="py-20 bg-gradient-to-b from-black to-purple-900">
-        <div className="container mx-auto px-6">
-          <div className="bg-black/50 backdrop-blur-lg rounded-2xl overflow-hidden">
-            <div className="grid md:grid-cols-2">
-              <div className="p-12">
-                <h2 className="text-3xl font-bold mb-4">Upcoming Featured Event</h2>
-                <div className="flex items-center mb-6">
-                  <Star className="text-yellow-500 h-5 w-5 mr-2" />
-                  <span className="text-yellow-500">Featured Performance</span>
-                </div>
-                <h3 className="text-2xl font-semibold mb-4">Symphony Under the Stars</h3>
-                <p className="text-gray-300 mb-6">
-                  Join us for an enchanting evening of classical masterpieces performed under the open sky.
-                  Experience the magic as world-class musicians bring timeless compositions to life.
-                </p>
-                <div className="space-y-2 text-gray-300 mb-8">
-                  <p>📅 Saturday, July 15, 2025</p>
-                  <p>⏰ 8:00 PM</p>
-                  <p>📍 Central Park Amphitheater</p>
-                </div>
-                <Link 
-                  to="/events"
-                  className="bg-purple-500 text-white px-8 py-4 rounded-full font-semibold hover:bg-purple-600 transition inline-flex items-center"
-                >
-                  Book Now <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </div>
-              <div 
-                className="h-full min-h-[400px]"
-                style={{
-                  backgroundImage: 'url(https://images.unsplash.com/photo-1470019693664-1d202d2c0907?auto=format&fit=crop&w=1000)',
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center'
-                }}
-              ></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Newsletter */}
-      <section className="py-20 bg-black">
-        <div className="container mx-auto px-6">
-          <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-4">Stay Updated</h2>
-            <p className="text-gray-400 mb-8">
+      <section className="py-12 md:py-16 bg-black">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="max-w-lg mx-auto text-center">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4">Stay Updated</h2>
+            <p className="text-gray-400 mb-6 text-sm md:text-base">
               Subscribe to our newsletter for the latest events, artist announcements, and exclusive offers.
             </p>
-            <form className="flex gap-4">
+            <form className="flex flex-col md:flex-row gap-3 md:gap-4 w-full">
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 px-6 py-4 rounded-full bg-gray-900 border border-gray-800 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none"
+                className="w-full px-4 py-3 md:px-6 md:py-4 rounded-full bg-gray-900 border border-gray-800 focus:ring-2 focus:ring-purple-500 outline-none text-sm md:text-base"
               />
               <button
                 type="submit"
-                className="bg-purple-500 text-white px-8 py-4 rounded-full font-semibold hover:bg-purple-600 transition whitespace-nowrap"
+                className="bg-purple-500 text-white px-6 py-3 md:px-8 md:py-4 rounded-full font-semibold hover:bg-purple-600 transition text-sm md:text-base whitespace-nowrap"
               >
                 Subscribe
               </button>

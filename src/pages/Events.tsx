@@ -129,63 +129,89 @@ function Events() {
   const combinedEvents = [...staticEvents, ...dynamicEvents];
   
   return (
-    <div className="bg-black">
-      <section className="relative py-20">
-        <div className="container mx-auto px-6">
-          <div className="max-w-2xl">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Upcoming <span className="text-purple-500">Events</span>
+    <div className="bg-black min-h-screen">
+      {/* Hero Section */}
+      <section className="relative py-16 md:py-24 bg-gradient-to-b from-purple-900/30 to-black">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="max-w-3xl text-center md:text-left">
+            <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-pink-300 bg-clip-text text-transparent">
+              Upcoming Experiences
             </h1>
-            <p className="text-xl text-gray-300">
-              Discover our carefully curated selection of performances, exhibitions, and cultural events.
+            <p className="text-lg md:text-xl text-gray-300 mb-8">
+              Immerse yourself in unforgettable moments of art and culture
             </p>
           </div>
         </div>
       </section>
-      <section className="py-12">
-        <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-12">
-            {combinedEvents.map((event, index) => (
+
+      {/* Events Grid */}
+      <section className="py-12 md:py-16">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {combinedEvents.map((event) => (
               <div
-                key={event._id || index}
-                className="bg-gray-900 rounded-xl overflow-hidden group hover:transform hover:-translate-y-1 transition duration-300"
+                key={event._id}
+                className="group relative bg-gray-900 rounded-2xl overflow-hidden transform transition-all duration-300 hover:shadow-2xl hover:shadow-purple-900/20"
               >
-                <div className="relative">
-                  <img src={event.image} alt={event.title} className="w-full h-64 object-cover" />
-                  <div className="absolute top-4 right-4 bg-purple-500 text-white px-4 py-1 rounded-full">
+                <div className="relative aspect-video">
+                  <img 
+                    src={event.image} 
+                    alt={event.title} 
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute bottom-4 left-4 bg-gradient-to-r from-purple-600 to-pink-500 text-white px-3 py-1 rounded-full text-sm font-medium">
                     {event.genere}
                   </div>
                 </div>
-                <div className="p-8">
-                  <h3 className="text-2xl font-bold mb-4">{event.title}</h3>
-                  <p className="text-gray-300 mb-6">{event.description}</p>
-                  <div className="space-y-3 text-gray-400 mb-8">
-                    <div className="flex items-center">
-                      <Calendar className="h-5 w-5 mr-3" />
-                      {new Date(event.date).toLocaleDateString()}
+
+                <div className="p-6 md:p-8">
+                  <div className="mb-6">
+                    <h3 className="text-xl md:text-2xl font-bold text-gray-100 mb-3">
+                      {event.title}
+                    </h3>
+                    <p className="text-gray-400 text-sm md:text-base line-clamp-3 mb-4">
+                      {event.description}
+                    </p>
+                  </div>
+
+                  <div className="space-y-4 mb-6">
+                    <div className="flex items-center text-gray-300">
+                      <Calendar className="h-5 w-5 mr-3 text-purple-400" />
+                      <span className="text-sm">
+                        {new Date(event.date).toLocaleDateString('en-US', {
+                          weekday: 'short',
+                          month: 'short',
+                          day: 'numeric'
+                        })}
+                      </span>
                     </div>
-                    <div className="flex items-center">
-                      <Clock className="h-5 w-5 mr-3" />
-                      {event.time}
+                    <div className="flex items-center text-gray-300">
+                      <Clock className="h-5 w-5 mr-3 text-purple-400" />
+                      <span className="text-sm">{event.time}</span>
                     </div>
-                    <div className="flex items-center">
-                      <MapPin className="h-5 w-5 mr-3" />
-                      {event.location}, {event.city}
+                    <div className="flex items-center text-gray-300">
+                      <MapPin className="h-5 w-5 mr-3 text-purple-400" />
+                      <span className="text-sm">
+                        {event.location}, {event.city}
+                      </span>
                     </div>
                   </div>
+
                   {bookedEvents.includes(event._id) ? (
                     <button
                       disabled
-                      className="w-full bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold transition flex items-center justify-center cursor-not-allowed"
+                      className="w-full bg-emerald-600/30 text-emerald-400 px-6 py-3 rounded-xl font-medium text-sm transition flex items-center justify-center gap-2 border border-emerald-600/50"
                     >
-                      Ticket Booked
+                      <button className="h-4 w-4" />
+                      Ticket Confirmed
                     </button>
                   ) : (
                     <button
                       onClick={() => handleBookTicket(event._id)}
-                      className="w-full bg-purple-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-600 transition flex items-center justify-center"
+                      className="w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white px-6 py-3 rounded-xl font-medium hover:shadow-lg hover:shadow-purple-600/30 transition-all flex items-center justify-center gap-2 group-hover:scale-[1.02]"
                     >
-                      Book Tickets <ArrowRight className="ml-2 h-5 w-5" />
+                      Reserve Seats
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </button>
                   )}
                 </div>
@@ -194,15 +220,20 @@ function Events() {
           </div>
         </div>
       </section>
-      <section className="py-20">
-        <div className="container mx-auto px-6">
-          <div className="bg-gradient-to-r from-purple-900 to-purple-600 rounded-2xl p-12 text-center">
-            <h2 className="text-3xl font-bold mb-4">View Full Calendar</h2>
-            <p className="text-xl text-gray-200 mb-8 max-w-2xl mx-auto">
-              Explore our complete schedule of events and plan your visits ahead.
+
+      {/* CTA Section */}
+      <section className="py-16 md:py-24">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="bg-gradient-to-br from-purple-900/60 to-pink-900/30 rounded-3xl p-8 md:p-16 text-center backdrop-blur-lg border border-purple-900/30">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-purple-300 to-pink-200 bg-clip-text text-transparent">
+              Never Miss a Moment
+            </h2>
+            <p className="text-gray-300 text-lg md:text-xl mb-8 max-w-2xl mx-auto">
+              Sync with our event calendar and plan your cultural journey
             </p>
-            <button className="bg-white text-purple-600 px-8 py-4 rounded-full font-semibold hover:bg-gray-100 transition">
-              Open Calendar
+            <button className="bg-white/90 text-purple-900 px-8 py-4 rounded-xl font-semibold hover:bg-white transition-all hover:shadow-lg hover:shadow-purple-900/20 flex items-center gap-2 mx-auto">
+              <Calendar className="h-5 w-5" />
+              View Full Calendar
             </button>
           </div>
         </div>

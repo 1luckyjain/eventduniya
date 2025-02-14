@@ -79,92 +79,118 @@ function Artist() {
   const combinedArtists = [...staticArtists, ...dynamicArtists];
 
   return (
-    <div className="bg-black">
-      <section className="relative py-20">
-        <div className="container mx-auto px-6">
-          <div className="max-w-2xl">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Our Featured <span className="text-purple-500">Artists</span>
+    <div className="bg-black min-h-screen">
+      {/* Hero Section */}
+      <section className="relative py-16 md:py-28 bg-gradient-to-b from-purple-900/30 to-black">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="max-w-4xl text-center md:text-left">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-300 bg-clip-text text-transparent">
+              Meet the <span className="text-purple-500">Artists</span>
             </h1>
-            <p className="text-xl text-gray-300">
-              Meet the extraordinary talents who bring their unique vision and creativity to our stage.
+            <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl">
+              Discover visionary artists shaping the future of cultural expression
             </p>
           </div>
         </div>
       </section>
-      <section className="py-12">
-        <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-12">
-            {combinedArtists.map((artist, index) => (
+
+      {/* Artists Grid */}
+      <section className="py-12 md:py-16">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+            {combinedArtists.map((artist) => (
               <div
-                key={artist._id || index}
-                className="bg-gray-900 rounded-xl overflow-hidden hover:transform hover:-translate-y-1 transition duration-300 cursor-pointer"
-                onClick={()=>{handleOnClick(artist._id)}}
+                key={artist._id}
+                className="group relative bg-gray-900 rounded-2xl overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-900/20"
+                onClick={() => handleOnClick(artist._id)}
               >
-                <div className="aspect-w-16 aspect-h-9">
+                <div className="relative aspect-square">
                   <img 
-                    src={artist.avatars && artist.avatars.length > 0 ? artist.avatars[0] : 'https://via.placeholder.com/500'} 
+                    src={artist.avatars?.[0] || 'https://via.placeholder.com/500'} 
                     alt={artist.username}
-                    className="w-full h-64 object-cover"
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 </div>
-                <div className="p-8">
-                  <h3 className="text-2xl font-bold mb-2">{artist.username}</h3>
-                  <p className="text-purple-500 mb-4">{artist.tag}</p>
-                  <p className="text-gray-300 mb-6">{artist.bio}</p>
-                  <div className="flex space-x-4">
+                
+                <div className="p-6 md:p-8 absolute bottom-0 left-0 right-0">
+                  <div className="mb-4">
+                    <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                      {artist.username}
+                    </h3>
+                    <p className="text-purple-400 font-medium">{artist.tag}</p>
+                  </div>
+                  <p className="text-gray-300 line-clamp-3 mb-6 text-sm md:text-base">
+                    {artist.bio}
+                  </p>
+                  
+                  <div className="flex space-x-4 opacity-80 group-hover:opacity-100 transition-opacity">
                     {artist.instagram && (
                       <a
                         href={artist.instagram}
-                        className="text-gray-400 hover:text-purple-500"
+                        className="text-gray-300 hover:text-purple-400 transition-colors"
                         onClick={(e) => e.stopPropagation()}
                       >
-                        <Instagram />
+                        <Instagram className="w-6 h-6" />
                       </a>
                     )}
                     {artist.twitter && (
                       <a
                         href={artist.twitter}
-                        className="text-gray-400 hover:text-purple-500"
+                        className="text-gray-300 hover:text-purple-400 transition-colors"
                         onClick={(e) => e.stopPropagation()}
                       >
-                        <Twitter />
+                        <Twitter className="w-6 h-6" />
                       </a>
                     )}
                     {artist.youtube && (
                       <a
                         href={artist.youtube}
-                        className="text-gray-400 hover:text-purple-500"
+                        className="text-gray-300 hover:text-purple-400 transition-colors"
                         onClick={(e) => e.stopPropagation()}
                       >
-                        <Youtube />
+                        <Youtube className="w-6 h-6" />
                       </a>
                     )}
                     {artist.facebook && (
                       <a
                         href={artist.facebook}
-                        className="text-gray-400 hover:text-purple-500"
+                        className="text-gray-300 hover:text-purple-400 transition-colors"
                         onClick={(e) => e.stopPropagation()}
                       >
-                        <Facebook />
+                        <Facebook className="w-6 h-6" />
                       </a>
                     )}
                   </div>
+                </div>
+
+                <div className="absolute top-4 right-4 bg-black/40 backdrop-blur-sm px-4 py-2 rounded-full text-sm text-white">
+                  View Profile
                 </div>
               </div>
             ))}
           </div>
         </div>
       </section>
-      <section className="py-20">
-        <div className="container mx-auto px-6">
-          <div className="bg-gradient-to-r from-purple-900 to-purple-600 rounded-2xl p-12 text-center">
-            <h2 className="text-3xl font-bold mb-4">Are You an Artist?</h2>
-            <p className="text-xl text-gray-200 mb-8 max-w-2xl mx-auto">
-              We're always looking for talented artists to join our community. Share your art with our audience.
+
+      {/* CTA Section */}
+      <section className="py-16 md:py-24">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="bg-gradient-to-br from-purple-900/60 to-pink-900/30 rounded-3xl p-8 md:p-16 text-center backdrop-blur-lg border border-purple-900/30 relative overflow-hidden">
+            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/dark-stripes.png')] opacity-10" />
+            
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-purple-300 to-pink-200 bg-clip-text text-transparent">
+              Ready to Shine?
+            </h2>
+            <p className="text-gray-300 text-lg md:text-xl mb-8 max-w-2xl mx-auto">
+            We're always looking for talented artists to join our community. Share your art with our audience.
             </p>
-            <button className="bg-white text-purple-600 px-8 py-4 rounded-full font-semibold hover:bg-gray-100 transition">
-              Apply to Perform
+            <button
+              className="bg-white/90 text-purple-900 px-8 py-4 rounded-xl font-semibold hover:bg-white transition-all hover:shadow-lg hover:shadow-purple-900/20 flex items-center gap-2 mx-auto relative z-10"
+              onClick={() => window.location.assign('http://localhost:5173/artistsignup')}
+            >
+              <button className="h-5 w-5" />
+              Join Now!
             </button>
           </div>
         </div>

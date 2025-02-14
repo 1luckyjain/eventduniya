@@ -80,14 +80,14 @@ function Contact() {
                     <Mail className="h-6 w-6 text-purple-500 mr-4 mt-1" />
                     <div>
                       <h3 className="font-semibold mb-1">Email</h3>
-                      <p className="text-gray-400">contact@artspace.com</p>
+                      <p className="text-gray-400">eventduniyaa@gmail.com</p>
                     </div>
                   </div>
                   <div className="flex items-start">
                     <Phone className="h-6 w-6 text-purple-500 mr-4 mt-1" />
                     <div>
                       <h3 className="font-semibold mb-1">Phone</h3>
-                      <p className="text-gray-400">(555) 123-4567</p>
+                      <p className="text-gray-400">+91 8435308486</p>
                     </div>
                   </div>
                   <div className="flex items-start">
@@ -95,8 +95,8 @@ function Contact() {
                     <div>
                       <h3 className="font-semibold mb-1">Address</h3>
                       <p className="text-gray-400">
-                        123 Art Street<br />
-                        New York, NY 10001
+                        Jaipur<br />
+                        Rajasthan , India
                       </p>
                     </div>
                   </div>

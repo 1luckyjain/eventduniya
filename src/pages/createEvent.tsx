@@ -2,6 +2,7 @@
 import React, { useState, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/auth-context';
+import { AlertCircle, Calendar, Clock, DollarSign, MapPin, Music, Tag, Users, Image } from 'lucide-react';
 
 export interface IEvent {
   image: string;
@@ -111,176 +112,200 @@ const CreateEvent: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-900 min-h-screen text-white p-6">
-      <h1 className="text-3xl font-bold mb-6">Create Event</h1>
-      <form onSubmit={handleSubmit} className="space-y-4 max-w-xl">
-        <div>
-          <label htmlFor="image" className="block text-sm font-medium">
-            Image URL
-          </label>
-          <input
-            type="text"
-            name="image"
-            id="image"
-            value={formData.image}
-            onChange={handleChange}
-            className="mt-1 block w-full bg-gray-800 p-2 rounded"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="fees" className="block text-sm font-medium">
-            Fees
-          </label>
-          <input
-            type="text"
-            name="fees"
-            id="fees"
-            value={formData.fees}
-            onChange={handleChange}
-            className="mt-1 block w-full bg-gray-800 p-2 rounded"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="title" className="block text-sm font-medium">
-            Title
-          </label>
-          <input
-            type="text"
-            name="title"
-            id="title"
-            value={formData.title}
-            onChange={handleChange}
-            className="mt-1 block w-full bg-gray-800 p-2 rounded"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="date" className="block text-sm font-medium">
-            Date
-          </label>
-          <input
-            type="date"
-            name="date"
-            id="date"
-            value={formData.date}
-            onChange={handleChange}
-            className="mt-1 block w-full bg-gray-800 p-2 rounded"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="location" className="block text-sm font-medium">
-            location
-          </label>
-          <input
-            type="text"
-            name="location"
-            id="location"
-            value={formData.location}
-            onChange={handleChange}
-            className="mt-1 block w-full bg-gray-800 p-2 rounded"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="city" className="block text-sm font-medium">
-            City
-          </label>
-          <input
-            type="text"
-            name="city"
-            id="city"
-            value={formData.city}
-            onChange={handleChange}
-            className="mt-1 block w-full bg-gray-800 p-2 rounded"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="time" className="block text-sm font-medium">
-            Time
-          </label>
-          <input
-            type="text"
-            name="time"
-            id="time"
-            value={formData.time}
-            onChange={handleChange}
-            className="mt-1 block w-full bg-gray-800 p-2 rounded"
-            placeholder="e.g., 18:30"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="description" className="block text-sm font-medium">
-            Description
-          </label>
-          <textarea
-            name="description"
-            id="description"
-            value={formData.description}
-            onChange={handleChange}
-            className="mt-1 block w-full bg-gray-800 p-2 rounded"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="type" className="block text-sm font-medium">
-            Type
-          </label>
-          <input
-            type="text"
-            name="type"
-            id="type"
-            value={formData.type}
-            onChange={handleChange}
-            className="mt-1 block w-full bg-gray-800 p-2 rounded"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="capacity" className="block text-sm font-medium">
-            Capacity
-          </label>
-          <input
-            type="number"
-            name="capacity"
-            id="capacity"
-            value={formData.capacity}
-            onChange={handleChange}
-            className="mt-1 block w-full bg-gray-800 p-2 rounded"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="genere" className="block text-sm font-medium">
-            Genre
-          </label>
-          <input
-            type="text"
-            name="genere"
-            id="genere"
-            value={formData.genere}
-            onChange={handleChange}
-            className="mt-1 block w-full bg-gray-800 p-2 rounded"
-            required
-          />
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto">
+        <div className="bg-gray-800/50 rounded-2xl shadow-xl p-6 md:p-8 lg:p-10">
+          <h1 className="text-3xl font-bold mb-8 bg-gradient-to-r from-purple-400 to-pink-300 bg-clip-text text-transparent">
+            Create New Event
+          </h1>
+          
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {error && (
+              <div className="bg-red-500/10 p-4 rounded-lg flex items-center gap-3 text-red-400 border border-red-500/30">
+                <AlertCircle className="h-5 w-5 flex-shrink-0" />
+                {error}
+              </div>
+            )}
 
-        {error && <p className="text-red-500">{error}</p>}
-        {success && <p className="text-green-500">{success}</p>}
+            {success && (
+              <div className="bg-green-500/10 p-4 rounded-lg flex items-center gap-3 text-green-400 border border-green-500/30">
+                <AlertCircle className="h-5 w-5 flex-shrink-0" />
+                {success}
+              </div>
+            )}
 
-        <button
-          type="submit"
-          className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Create Event
-        </button>
-      </form>
+            <div className="grid md:grid-cols-2 gap-6">
+              <InputField
+                icon={<Image className="h-5 w-5 text-gray-400" />}
+                label="Image URL"
+                name="image"
+                value={formData.image}
+                onChange={handleChange}
+                placeholder="https://example.com/image.jpg"
+                required
+              />
+
+              <InputField
+                icon={<DollarSign className="h-5 w-5 text-gray-400" />}
+                label="Fees"
+                name="fees"
+                value={formData.fees}
+                onChange={handleChange}
+                placeholder="Free or $50"
+                required
+              />
+            </div>
+
+            <InputField
+              icon={<Tag className="h-5 w-5 text-gray-400" />}
+              label="Event Title"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              placeholder="Summer Music Festival"
+              required
+            />
+
+            <div className="grid md:grid-cols-2 gap-6">
+              <InputField
+                icon={<Calendar className="h-5 w-5 text-gray-400" />}
+                label="Date"
+                type="date"
+                name="date"
+                value={formData.date}
+                onChange={handleChange}
+                required
+              />
+
+              <InputField
+                icon={<Clock className="h-5 w-5 text-gray-400" />}
+                label="Time"
+                name="time"
+                value={formData.time}
+                onChange={handleChange}
+                placeholder="18:30"
+                required
+              />
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              <InputField
+                icon={<MapPin className="h-5 w-5 text-gray-400" />}
+                label="Location"
+                name="location"
+                value={formData.location}
+                onChange={handleChange}
+                placeholder="Central Park Amphitheater"
+                required
+              />
+
+              <InputField
+                icon={<MapPin className="h-5 w-5 text-gray-400" />}
+                label="City"
+                name="city"
+                value={formData.city}
+                onChange={handleChange}
+                placeholder="New York"
+                required
+              />
+            </div>
+
+            <InputField
+              icon={<Tag className="h-5 w-5 text-gray-400" />}
+              label="Event Type"
+              name="type"
+              value={formData.type}
+              onChange={handleChange}
+              placeholder="Concert, Exhibition, etc."
+              required
+            />
+
+            <div className="grid md:grid-cols-2 gap-6">
+              <InputField
+                icon={<Users className="h-5 w-5 text-gray-400" />}
+                label="Capacity"
+                type="number"
+                name="capacity"
+                value={formData.capacity}
+                onChange={handleChange}
+                placeholder="500"
+                required
+              />
+
+              <InputField
+                icon={<Music className="h-5 w-5 text-gray-400" />}
+                label="Genre"
+                name="genere"
+                value={formData.genere}
+                onChange={handleChange}
+                placeholder="Rock, Classical, etc."
+                required
+              />
+            </div>
+
+            <div className="relative">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Description
+              </label>
+              <div className="relative">
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 bg-gray-700/20 border border-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent placeholder-gray-500"
+                  rows={5}
+                  placeholder="Describe your event in detail..."
+                  required
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white py-4 px-6 rounded-xl font-bold hover:shadow-lg transition-all hover:scale-[1.02] flex items-center justify-center gap-2"
+            >
+              <button className="h-5 w-5" />
+              Create Event
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };
+
+// Reusable Input Component
+const InputField = ({
+  icon,
+  label,
+  type = "text",
+  name,
+  value,
+  onChange,
+  placeholder,
+  required
+}: any) => (
+  <div className="relative">
+    <label className="block text-sm font-medium text-gray-300 mb-2">
+      {label}
+    </label>
+    <div className="relative">
+      {icon && (
+        <div className="absolute left-3 top-1/2 -translate-y-1/2">
+          {icon}
+        </div>
+      )}
+      <input
+        type={type}
+        name={name}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        required={required}
+        className={`w-full ${icon ? 'pl-10' : 'pl-4'} pr-4 py-3 bg-gray-700/20 border border-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent placeholder-gray-500`}
+      />
+    </div>
+  </div>
+);
 
 export default CreateEvent;
