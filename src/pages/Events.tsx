@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { Calendar, Clock, MapPin, ArrowRight } from 'lucide-react';
 import { useAuth } from '../context/auth-context';
 import axios from 'axios';
 
 function Events() {
+  const { token } = useAuth();
   // Updated static events to use _id instead of id
   const staticEvents = [
     {
@@ -38,7 +39,13 @@ function Events() {
       .catch((error) => console.error('Error fetching events:', error));
 
   }, []);
-
+  const axiosConfig = {
+    withCredentials: true,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  };
   // Fetch booked events for the user
   useEffect(() => {
     async function fetchUserBookedEvents() {
@@ -46,7 +53,7 @@ function Events() {
         const response = await axios.post(
           'http://localhost:5000/api/user/events',
           { userId },
-          { withCredentials: true }
+          axiosConfig
         );
         // Ensure the response data is an array
         const booked = Array.isArray(response.data.eventIds)
@@ -73,7 +80,7 @@ function Events() {
       const response = await axios.post(
         `http://localhost:5000/api/bookticket/${_id}`,
         payload,
-        { withCredentials: true }
+        axiosConfig
       );
      
       setBookedEvents((prev) => [...prev, _id]);

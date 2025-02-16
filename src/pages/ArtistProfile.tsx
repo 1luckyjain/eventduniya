@@ -242,7 +242,7 @@ const ArtistProfile: React.FC = () => {
         body: JSON.stringify(payload),
       });
 
-      if (!response.ok) {
+      if (response.status!=201) {
         throw new Error('Failed to submit contact form');
       }
       const data = await response.json();
