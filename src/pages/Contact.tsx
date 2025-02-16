@@ -114,7 +114,7 @@ function Contact() {
               </div>
 
               {/* Map */}
-              <div className="bg-gray-900 rounded-xl p-8">
+              {/* <div className="bg-gray-900 rounded-xl p-8">
                 <h2 className="text-2xl font-bold mb-6">Location</h2>
                 <div className="aspect-w-16 aspect-h-9">
                   <iframe
@@ -125,7 +125,7 @@ function Contact() {
                     loading="lazy"
                   ></iframe>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
