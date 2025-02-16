@@ -98,7 +98,7 @@ const ArtistProfile: React.FC = () => {
     <div className="bg-black min-h-screen">
       {/* Cover Image */}
       <div 
-        className="h-80 w-full relative"
+        className="h-48 w-full relative "
         style={{
           backgroundImage: `url(${coverImage})`,
           backgroundSize: 'cover',
@@ -109,19 +109,24 @@ const ArtistProfile: React.FC = () => {
       </div>
 
       <div className="container mx-auto px-6 -mt-20 relative">
-        <div className="grid md:grid-cols-4 gap-8">
-          {/* Sidebar */}
-          <div className="md:col-span-1">
-            <div className="bg-gray-900 rounded-xl p-6">
-              <div className="flex flex-col items-center text-center mb-6">
-                <img 
-                  src={profileImage} 
-                  alt={artistProfile.username}
-                  className="w-32 h-32 rounded-full mb-4 object-cover border-4 border-purple-500"
-                />
-                <h2 className="text-xl font-bold">{artistProfile.username}</h2>
-                <p className="text-purple-500">{artistProfile.tag}</p>
-              </div>
+      <div className="grid md:grid-cols-4 gap-8">
+  {/* Sidebar */}
+  <div className="md:col-span-1">
+    <div className="bg-gray-900 rounded-xl p-6">
+      <div className="flex flex-col items-center text-center mb-6">
+        {/* Image Container */}
+        <div className="w-full max-w-[200px] md:max-w-full mx-auto mb-4 
+                        overflow-hidden rounded-lg border-4 border-purple-500
+                        hover:scale-105 transition-transform duration-300">
+          <img 
+            src={profileImage} 
+            alt={artistProfile.username}
+            className="w-full h-auto object-cover aspect-square"
+          />
+        </div>
+        <h2 className="text-xl font-bold">{artistProfile.username}</h2>
+        <p className="text-purple-500">{artistProfile.tag}</p>
+      </div>
               <div className="flex justify-center space-x-4 mb-6">
                 {artistProfile.instagram && (
                   <a href={artistProfile.instagram} className="text-gray-400 hover:text-purple-500">
@@ -139,7 +144,7 @@ const ArtistProfile: React.FC = () => {
                   </a>
                 )}
               </div>
-              <nav className="space-y-2">
+              {/* <nav className="space-y-2">
                 <button className="w-full flex items-center space-x-3 px-4 py-2 rounded-lg bg-purple-500 text-white">
                   <User className="h-5 w-5" />
                   <span>Profile</span>
@@ -148,7 +153,7 @@ const ArtistProfile: React.FC = () => {
                   <LogOut className="h-5 w-5" />
                   <span>Logout</span>
                 </button>
-              </nav>
+              </nav> */}
             </div>
           </div>
 
@@ -166,24 +171,77 @@ const ArtistProfile: React.FC = () => {
             </div>
 
             {/* Video Links Section */}
-            <div className="bg-gray-900 rounded-xl p-8">
-              <h3 className="text-2xl font-bold mb-4">Videos</h3>
-              <div className="space-y-2">
-                <a href={artistProfile.videoLink1} className="text-purple-500 hover:underline">
-                  Video 1
-                </a>
-                {artistProfile.videoLink2 && (
-                  <a href={artistProfile.videoLink2} className="text-purple-500 hover:underline">
-                    Video 2
-                  </a>
-                )}
-                {artistProfile.videoLink3 && (
-                  <a href={artistProfile.videoLink3} className="text-purple-500 hover:underline">
-                    Video 3
-                  </a>
-                )}
-              </div>
+            <div className="bg-gray-900 rounded-xl p-6 md:p-8">
+  <h3 className="text-2xl font-bold mb-6 text-center md:text-left">Videos</h3>
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    {/* Video 1 */}
+    <a 
+      href={artistProfile.videoLink1} 
+      className="group flex items-center p-4 rounded-lg bg-gray-800 hover:bg-purple-900/20 transition-all duration-300 border border-gray-700 hover:border-purple-500"
+    >
+      <div className="flex-1">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-purple-500/20 rounded-lg">
+            <svg className="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <span className="text-purple-400 group-hover:text-purple-300 font-medium transition-colors">Video 1</span>
+        </div>
+      </div>
+      <svg className="w-5 h-5 text-gray-400 group-hover:text-purple-500 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
+      </svg>
+    </a>
+
+    {/* Video 2 - Conditional */}
+    {artistProfile.videoLink2 && (
+      <a 
+        href={artistProfile.videoLink2} 
+        className="group flex items-center p-4 rounded-lg bg-gray-800 hover:bg-purple-900/20 transition-all duration-300 border border-gray-700 hover:border-purple-500"
+      >
+        <div className="flex-1">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-purple-500/20 rounded-lg">
+              <svg className="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
             </div>
+            <span className="text-purple-400 group-hover:text-purple-300 font-medium transition-colors">Video 2</span>
+          </div>
+        </div>
+        <svg className="w-5 h-5 text-gray-400 group-hover:text-purple-500 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </a>
+    )}
+
+    {/* Video 3 - Conditional */}
+    {artistProfile.videoLink3 && (
+      <a 
+        href={artistProfile.videoLink3} 
+        className="group flex items-center p-4 rounded-lg bg-gray-800 hover:bg-purple-900/20 transition-all duration-300 border border-gray-700 hover:border-purple-500"
+      >
+        <div className="flex-1">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-purple-500/20 rounded-lg">
+              <svg className="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <span className="text-purple-400 group-hover:text-purple-300 font-medium transition-colors">Video 3</span>
+          </div>
+        </div>
+        <svg className="w-5 h-5 text-gray-400 group-hover:text-purple-500 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </a>
+    )}
+  </div>
+</div>
 
             {/* Contact Details */}
             <div className="bg-gray-900 rounded-xl p-8">

@@ -7,48 +7,6 @@ function Events() {
   // Updated static events to use _id instead of id
   const staticEvents = [
     {
-      _id: 'static-1',
-      title: "Symphony Under the Stars",
-      date: "2025-07-15",
-      time: "8:00 PM",
-      location: "Central Park Amphitheater",
-      city: "New York",
-      image: "https://images.unsplash.com/photo-1470019693664-1d202d2c0907?auto=format&fit=crop&w=800",
-      description: "An enchanting evening of classical masterpieces performed under the open sky.",
-      type: "Concert",
-      genere: "Classical",
-      capacity: 500,
-      fees: "$50"
-    },
-    {
-      _id: 'static-2',
-      title: "Jazz Night Fusion",
-      date: "2025-07-20",
-      time: "7:30 PM",
-      location: "Blue Note Jazz Club",
-      city: "New York",
-      image: "https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=800",
-      description: "Experience the fusion of traditional jazz with contemporary rhythms.",
-      type: "Concert",
-      genere: "Jazz",
-      capacity: 200,
-      fees: "$40"
-    },
-    {
-      _id: 'static-3',
-      title: "Modern Dance Showcase",
-      date: "2025-07-25",
-      time: "6:00 PM",
-      location: "Contemporary Arts Center",
-      city: "Los Angeles",
-      image: "https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=800",
-      description: "A showcase of innovative choreography and expressive movement.",
-      type: "Performance",
-      genere: "Dance",
-      capacity: 300,
-      fees: "$30"
-    },
-    {
       _id: 'static-4',
       title: "Art Gallery Opening",
       date: "2025-08-01",

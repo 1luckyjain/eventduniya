@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { User, Ticket, Bell, Settings, LogOut, Heart, MapPin, Calendar } from 'lucide-react';
+import { User, Ticket, Bell, Settings, LogOut, Heart, MapPin, Calendar,Plus } from 'lucide-react';
 import { useAuth } from '../context/auth-context';
 import axios from 'axios';
+import { Link ,useNavigate} from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
+
 
 function UserProfile() {
   const auth = useAuth();
@@ -15,7 +18,7 @@ function UserProfile() {
     avatar:
       user?.avatar ||
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300",
-    savedArtists: user?.savedArtists || ["Elena Rodriguez", "Marcus Chen"],
+    savedArtists: user?.savedArtists || [],
   };
 
   // State for upcoming events (booked events)
@@ -87,7 +90,7 @@ function UserProfile() {
               <nav className="space-y-1.5">
                 {[
                   { icon: User, label: 'Profile', active: true },
-                  { icon: Ticket, label: 'My Tickets' },
+                  { icon: Ticket, label: 'My Tickets' , path: '/create-event'},
                   { icon: Bell, label: 'Notifications' },
                   { icon: Settings, label: 'Settings' },
                 ].map((item, index) => (
@@ -105,7 +108,19 @@ function UserProfile() {
                 ))}
                 <button className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 transition-all">
                   <LogOut className="h-5 w-5 flex-shrink-0" />
-                  <span className="text-sm font-medium">Logout</span>
+
+<Link to="/logout">
+  <span className="text-sm font-medium">Logout</span>
+</Link>
+
+                </button>
+                <button className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 transition-all">
+                  <Plus className="h-5 w-5 flex-shrink-0" />
+
+<Link to="/create-event">
+  <span className="text-sm font-medium">Create-Event</span>
+</Link>
+
                 </button>
               </nav>
             </div>

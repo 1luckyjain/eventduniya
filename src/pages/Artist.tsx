@@ -7,42 +7,8 @@ import { useAuth } from '../context/auth-context';
 function Artist() {
   // Use _id for static artists.
   const staticArtists = [
-    {
-      _id: '1',
-      username: "Elena Rodriguez",
-      avatars: ["https://images.unsplash.com/photo-1549213783-8284d0336c4f?auto=format&fit=crop&w=500"],
-      tag: "Classical Pianist",
-      bio: "International award-winning pianist known for her dynamic interpretations of classical masterpieces.",
-      instagram: "#",
-      twitter: "#",
-      youtube: "#",
-      facebook: "#",
-      tiktok: ""
-    },
-    {
-      _id: '2',
-      username: "Marcus Chen",
-      avatars: ["https://images.unsplash.com/photo-1463453091185-61582044d556?auto=format&fit=crop&w=500"],
-      tag: "Jazz Saxophonist",
-      bio: "Pioneering jazz artist blending traditional and contemporary styles into unique compositions.",
-      instagram: "#",
-      twitter: "#",
-      youtube: "",
-      facebook: "#",
-      tiktok: ""
-    },
-    {
-      _id: '3',
-      username: "Sarah Williams",
-      avatars: ["https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=500"],
-      tag: "Contemporary Dancer",
-      bio: "Renowned choreographer and performer pushing the boundaries of modern dance.",
-      instagram: "#",
-      twitter: "#",
-      youtube: "",
-      facebook: "",
-      tiktok: ""
-    },
+    
+   
     {
       _id: '4',
       username: "David Thompson",

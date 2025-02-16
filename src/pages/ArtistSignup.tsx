@@ -140,7 +140,7 @@ const ArtistSignup: React.FC = () => {
                   </div>
                   
                   <InputField
-                    icon={<User size={18} className="text-gray-400" />}
+                    icon={<User size={18} className="text-black" />}
                     label="Username"
                     id="username"
                     register={register}

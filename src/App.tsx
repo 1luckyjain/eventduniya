@@ -103,9 +103,9 @@ const App: React.FC = () => {
                   <Link to="/create-event" className="hover:text-purple-500 transition">
                     Create Event
                   </Link>
-                  <Link to="/logout" className="hover:text-purple-500 transition">
+                  {/* <Link to="/logout" className="hover:text-purple-500 transition">
                     Logout
-                  </Link>
+                  </Link> */}
                 </>
               ) : (
                 <>
@@ -178,13 +178,13 @@ const App: React.FC = () => {
                       >
                         Create Event
                       </Link>
-                      <Link
+                      {/* <Link
                         to="/logout"
                         className="hover:text-purple-500 transition"
                         onClick={() => setIsMenuOpen(false)}
                       >
                         Logout
-                      </Link>
+                      </Link> */}
                     </>
                   ) : (
                     <>
