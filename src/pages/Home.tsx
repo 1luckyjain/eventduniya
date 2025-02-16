@@ -44,6 +44,62 @@ function Home() {
         </div>
       </section>
 
+      {/* About Section */}
+<section className="py-12 md:py-24 bg-black">
+  <div className="container mx-auto px-4 md:px-6">
+    <div className="grid md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
+      {/* Image Section */}
+      <div className="relative group order-2 md:order-1">
+        <div className="relative rounded-2xl overflow-hidden aspect-square before:absolute before:inset-0 before:bg-purple-500/10 before:z-10">
+          <img
+            src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+            alt="Live event crowd"
+            className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+          />
+        </div>
+        <div className="absolute -bottom-4 -right-4 w-1/2 h-1/2 border-4 border-purple-500/30 rounded-xl z-0 hidden md:block"></div>
+      </div>
+
+      {/* Content Section */}
+      <div className="order-1 md:order-2 space-y-6 md:space-y-8">
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-purple-600">
+          Revolutionizing Event Experiences
+        </h2>
+        <p className="text-lg md:text-xl text-gray-300 leading-relaxed">
+          At Event Duniya, we're redefining how you experience live entertainment. 
+          Our platform bridges the gap between passionate artists and eager audiences, 
+          creating unforgettable moments that resonate.
+        </p>
+        <div className="space-y-4">
+          <div className="flex items-center gap-4">
+            <div className="p-2 bg-purple-500/10 rounded-lg">
+              <Star className="h-6 w-6 text-purple-400" />
+            </div>
+            <span className="text-gray-100 font-medium">Curated Artist Selection</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="p-2 bg-purple-500/10 rounded-lg">
+              <Calendar className="h-6 w-6 text-purple-400" />
+            </div>
+            <span className="text-gray-100 font-medium">360° Event Management</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="p-2 bg-purple-500/10 rounded-lg">
+              <Users className="h-6 w-6 text-purple-400" />
+            </div>
+            <span className="text-gray-100 font-medium">Audience Engagement Tools</span>
+          </div>
+        </div>
+        <Link 
+          to="/artist"
+          className="inline-block bg-gradient-to-r from-purple-500 to-purple-600 text-white px-8 py-4 rounded-full font-semibold hover:from-purple-600 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-purple-500/20"
+        >
+          Explore Our Network
+        </Link>
+      </div>
+    </div>
+  </div>
+</section>
       {/* Features Section */}
       <section className="py-12 md:py-16 bg-black">
         <div className="container mx-auto px-4 md:px-6">
@@ -63,7 +119,7 @@ function Home() {
             }].map((feature, index) => (
               <div key={index} className="bg-gray-900 p-5 md:p-8 rounded-xl hover:-translate-y-1 transition-transform">
                 <div className="mb-4">{feature.icon}</div>
-                <h3 className="text-lg md:text-xl font-semibold mb-2">{feature.title}</h3>
+                <h3 className="text-lg md:text-xl font-semibold mb-2 text-white">{feature.title}</h3>
                 <p className="text-gray-400 text-sm md:text-base">{feature.description}</p>
               </div>
             ))}
@@ -75,7 +131,7 @@ function Home() {
       <section className="py-12 md:py-16 bg-black">
         <div className="container mx-auto px-4 md:px-6">
           <div className="max-w-lg mx-auto text-center">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4">Stay Updated</h2>
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">Stay Updated</h2>
             <p className="text-gray-400 mb-6 text-sm md:text-base">
               Subscribe to our newsletter for the latest events, artist announcements, and exclusive offers.
             </p>
@@ -83,7 +139,7 @@ function Home() {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="w-full px-4 py-3 md:px-6 md:py-4 rounded-full bg-gray-900 border border-gray-800 focus:ring-2 focus:ring-purple-500 outline-none text-sm md:text-base"
+                className="w-full px-4 py-3 md:px-6 md:py-4 rounded-full bg-gray-900 border border-gray-800 focus:ring-2 focus:ring-purple-500 outline-none text-sm md:text-base text-white"
               />
               <button
                 type="submit"
