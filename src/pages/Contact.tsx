@@ -146,10 +146,10 @@ function Contact() {
                   question: "What is your refund policy?",
                   answer: "We offer full refunds up to 48 hours before the event. After that, tickets can be exchanged for another event of equal value."
                 },
-                {
-                  question: "Is there parking available?",
-                  answer: "Yes, we have a dedicated parking garage adjacent to our venue. Pre-booking is available for special events."
-                },
+                //{
+                //   question: "Is there parking available?",
+                //   answer: "Yes, we have a dedicated parking garage adjacent to our venue. Pre-booking is available for special events."
+                // },
                 {
                   question: "Are your venues accessible?",
                   answer: "All our venues are fully accessible with wheelchair ramps, elevators, and accessible seating areas."
