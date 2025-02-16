@@ -36,12 +36,18 @@ const Signup: React.FC = () => {
   const onSubmit = async (values: SignupFormValues) => {
     try {
       setAuthenticationStatus(STATUS.PENDING);
-      const response = await axios.post("http://localhost:5000/api/auth/signup", {
-        username: values.username,
-        email: values.email,
-        password: values.password,
-        role: "User",
-      });
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/signup",
+        {
+          username: values.username,
+          email: values.email,
+          password: values.password,
+          role: "User",
+        },
+        {
+          withCredentials: true,
+        }
+      );
       
       setAuthenticationStatus(STATUS.SUCCEEDED);
       const { user, token, expiresAt } = response.data;
@@ -53,14 +59,17 @@ const Signup: React.FC = () => {
   };
 
   const handleGoogleSuccess = (credentialResponse: any) => {
-    axios.post("http://localhost:5000/api/auth/google", 
+    axios.post(
+      "http://localhost:5000/api/auth/google", 
       { credential: credentialResponse.credential }, 
       { withCredentials: true }
-    ).then((response) => {
+    )
+    .then((response) => {
       const { user, token, expiresAt } = response.data;
       login(user, token, expiresAt);
       navigate("/");
-    }).catch((error) => {
+    })
+    .catch((error) => {
       console.error("Google login error:", error);
     });
   };
@@ -263,6 +272,16 @@ const Signup: React.FC = () => {
             className="text-blue-600 hover:underline font-medium"
           >
             Sign in
+          </Link>
+        </p>
+        {/* New link for artists */}
+        <p className="text-center text-gray-600 mt-4">
+          Are you an Artist?{" "}
+          <Link
+            to="/artistsignup"
+            className="text-blue-600 hover:underline font-medium"
+          >
+            Sign up as an Artist
           </Link>
         </p>
       </div>

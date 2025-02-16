@@ -2,10 +2,21 @@
 import React, { useState, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/auth-context';
-import { AlertCircle, Calendar, Clock, DollarSign, MapPin, Music, Tag, Users, Image } from 'lucide-react';
+import {
+  AlertCircle,
+  Calendar,
+  Clock,
+  DollarSign,
+  MapPin,
+  Music,
+  Tag,
+  Users,
+} from 'lucide-react';
 
 export interface IEvent {
   image: string;
+  image1: string;
+  image2: string;
   fees: string;
   title: string;
   date: Date;
@@ -19,12 +30,14 @@ export interface IEvent {
 }
 
 const CreateEvent: React.FC = () => {
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const navigate = useNavigate();
 
-  // Set up form state; date is kept as string for the input and later converted
+  // Set up form state; date is kept as a string for the input and later converted
   const [formData, setFormData] = useState({
     image: '',
+    image1: '',
+    image2: '',
     fees: '',
     title: '',
     date: '',
@@ -40,6 +53,7 @@ const CreateEvent: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
+  // Handle text/number input changes for non-file fields
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -47,6 +61,59 @@ const CreateEvent: React.FC = () => {
       ...formData,
       [e.target.name]: e.target.value,
     });
+  };
+
+  // Function to upload a file using /api/image/upload and update the corresponding image field
+  const uploadFile = async (
+    file: File,
+    field: 'image' | 'image1' | 'image2'
+  ) => {
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    try {
+      // Request presigned URL from backend
+      const res = await fetch(`${API_URL}/api/image/upload`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        credentials: 'include', 
+        body: JSON.stringify({
+          imageName: file.name,
+          imageType: file.type,
+        }),
+      });
+      const data = await res.json();
+      if (!data.uploadUrl) {
+        throw new Error('Could not get upload URL');
+      }
+
+      // Upload file directly to S3 using the presigned URL
+      const uploadRes = await fetch(data.uploadUrl, {
+        method: 'PUT',
+        body: file,
+      });
+      if (!uploadRes.ok) {
+        throw new Error('Failed to upload image');
+      }
+
+      // Update the corresponding image field in state with the final image URL
+      setFormData(prev => ({ ...prev, [field]: data.imageUrl }));
+    } catch (err: any) {
+      console.error('Error uploading image:', err);
+      setError(err.message || 'Error uploading image');
+    }
+  };
+
+  // Handler for file input changes
+  const handleImageUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: 'image' | 'image1' | 'image2'
+  ) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      await uploadFile(file, field);
+    }
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -57,6 +124,8 @@ const CreateEvent: React.FC = () => {
     // Build payload converting capacity to number and date to a Date object
     const payload: IEvent = {
       image: formData.image,
+      image1: formData.image1,
+      image2: formData.image2,
       fees: formData.fees,
       title: formData.title,
       date: new Date(formData.date),
@@ -88,11 +157,12 @@ const CreateEvent: React.FC = () => {
 
       const data = await response.json();
       setSuccess('Event created successfully!');
-      // Optionally, redirect to the new event's page:
-      // navigate(`/events/${data._id}`);
-      // Or clear the form:
+
+      // Clear the form
       setFormData({
         image: '',
+        image1: '',
+        image2: '',
         fees: '',
         title: '',
         date: '',
@@ -118,7 +188,7 @@ const CreateEvent: React.FC = () => {
           <h1 className="text-3xl font-bold mb-8 bg-gradient-to-r from-purple-400 to-pink-300 bg-clip-text text-transparent">
             Create New Event
           </h1>
-          
+
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
               <div className="bg-red-500/10 p-4 rounded-lg flex items-center gap-3 text-red-400 border border-red-500/30">
@@ -134,17 +204,84 @@ const CreateEvent: React.FC = () => {
               </div>
             )}
 
-            <div className="grid md:grid-cols-2 gap-6">
-              <InputField
-                icon={<Image className="h-5 w-5 text-gray-400" />}
-                label="Image URL"
-                name="image"
-                value={formData.image}
-                onChange={handleChange}
-                placeholder="https://example.com/image.jpg"
-                required
-              />
+            {/* Image Upload Section */}
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300">
+                  Primary Image (required)
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleImageUpload(e, 'image')}
+                  required
+                  className="block w-full text-sm text-gray-500
+                             file:mr-4 file:py-2 file:px-4
+                             file:rounded-md file:border-0
+                             file:text-sm file:font-semibold
+                             file:bg-purple-600 file:text-white
+                             hover:file:bg-purple-700"
+                />
+                {formData.image && (
+                  <img
+                    src={formData.image}
+                    alt="Primary"
+                    className="mt-2 h-20 object-contain rounded"
+                  />
+                )}
+              </div>
 
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300">
+                  Secondary Image
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleImageUpload(e, 'image1')}
+                  className="block w-full text-sm text-gray-500
+                             file:mr-4 file:py-2 file:px-4
+                             file:rounded-md file:border-0
+                             file:text-sm file:font-semibold
+                             file:bg-purple-600 file:text-white
+                             hover:file:bg-purple-700"
+                />
+                {formData.image1 && (
+                  <img
+                    src={formData.image1}
+                    alt="Secondary"
+                    className="mt-2 h-20 object-contain rounded"
+                  />
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300">
+                  Tertiary Image
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleImageUpload(e, 'image2')}
+                  className="block w-full text-sm text-gray-500
+                             file:mr-4 file:py-2 file:px-4
+                             file:rounded-md file:border-0
+                             file:text-sm file:font-semibold
+                             file:bg-purple-600 file:text-white
+                             hover:file:bg-purple-700"
+                />
+                {formData.image2 && (
+                  <img
+                    src={formData.image2}
+                    alt="Tertiary"
+                    className="mt-2 h-20 object-contain rounded"
+                  />
+                )}
+              </div>
+            </div>
+
+            {/* Other Event Details */}
+            <div className="grid md:grid-cols-2 gap-6">
               <InputField
                 icon={<DollarSign className="h-5 w-5 text-gray-400" />}
                 label="Fees"
@@ -154,17 +291,16 @@ const CreateEvent: React.FC = () => {
                 placeholder="Free or $50"
                 required
               />
+              <InputField
+                icon={<Tag className="h-5 w-5 text-gray-400" />}
+                label="Event Title"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                placeholder="Summer Music Festival"
+                required
+              />
             </div>
-
-            <InputField
-              icon={<Tag className="h-5 w-5 text-gray-400" />}
-              label="Event Title"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-              placeholder="Summer Music Festival"
-              required
-            />
 
             <div className="grid md:grid-cols-2 gap-6">
               <InputField
@@ -176,7 +312,6 @@ const CreateEvent: React.FC = () => {
                 onChange={handleChange}
                 required
               />
-
               <InputField
                 icon={<Clock className="h-5 w-5 text-gray-400" />}
                 label="Time"
@@ -198,7 +333,6 @@ const CreateEvent: React.FC = () => {
                 placeholder="Central Park Amphitheater"
                 required
               />
-
               <InputField
                 icon={<MapPin className="h-5 w-5 text-gray-400" />}
                 label="City"
@@ -231,7 +365,6 @@ const CreateEvent: React.FC = () => {
                 placeholder="500"
                 required
               />
-
               <InputField
                 icon={<Music className="h-5 w-5 text-gray-400" />}
                 label="Genre"
@@ -247,24 +380,21 @@ const CreateEvent: React.FC = () => {
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 Description
               </label>
-              <div className="relative">
-                <textarea
-                  name="description"
-                  value={formData.description}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 bg-gray-700/20 border border-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent placeholder-gray-500"
-                  rows={5}
-                  placeholder="Describe your event in detail..."
-                  required
-                />
-              </div>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                className="w-full px-4 py-3 bg-gray-700/20 border border-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent placeholder-gray-500"
+                rows={5}
+                placeholder="Describe your event in detail..."
+                required
+              />
             </div>
 
             <button
               type="submit"
               className="w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white py-4 px-6 rounded-xl font-bold hover:shadow-lg transition-all hover:scale-[1.02] flex items-center justify-center gap-2"
             >
-              <button className="h-5 w-5" />
               Create Event
             </button>
           </form>
@@ -274,17 +404,28 @@ const CreateEvent: React.FC = () => {
   );
 };
 
-// Reusable Input Component
-const InputField = ({
+// Reusable Input Component for text/number/date fields
+interface InputFieldProps {
+  icon?: React.ReactNode;
+  label: string;
+  type?: string;
+  name: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder?: string;
+  required?: boolean;
+}
+
+const InputField: React.FC<InputFieldProps> = ({
   icon,
   label,
-  type = "text",
+  type = 'text',
   name,
   value,
   onChange,
   placeholder,
-  required
-}: any) => (
+  required,
+}) => (
   <div className="relative">
     <label className="block text-sm font-medium text-gray-300 mb-2">
       {label}

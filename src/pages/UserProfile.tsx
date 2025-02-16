@@ -1,16 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { User, Ticket, Bell, Settings, LogOut, Heart, MapPin, Calendar,Plus } from 'lucide-react';
+import {
+  User,
+  Ticket,
+  Bell,
+  Settings,
+  LogOut,
+  Heart,
+  MapPin,
+  Calendar,
+  Plus,
+} from 'lucide-react';
 import { useAuth } from '../context/auth-context';
 import axios from 'axios';
-import { Link ,useNavigate} from 'react-router-dom';
-// import { useNavigate } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
 
 function UserProfile() {
-  const auth = useAuth();
-  const user = auth.user;
-  
-  // Build basic profile info from the authenticated user.
+  const { user, token } = useAuth();
+  const navigate = useNavigate();
+
+  // Basic profile info
   const userProfile = {
     name: user?.username || "Your Name",
     email: user?.email || "you@example.com",
@@ -18,20 +26,34 @@ function UserProfile() {
     avatar:
       user?.avatar ||
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300",
-    savedArtists: user?.savedArtists || [],
+  };
+
+  const userId = user?._id;
+
+  // Axios configuration with token header
+  const axiosConfig = {
+    withCredentials: true,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
   };
 
   // State for upcoming events (booked events)
   const [upcomingEvents, setUpcomingEvents] = useState<any[]>([]);
-  const userId = user?._id;
+  // State for saved artists (fetched from API)
+  const [savedArtists, setSavedArtists] = useState<any[]>([]);
+  // State for queries (if the user is an artist)
+  const [queries, setQueries] = useState<any[]>([]);
 
+  // Fetch upcoming events for the user
   useEffect(() => {
     async function fetchBookedEvents() {
       try {
         // 1. Fetch all events from the API.
         const allEventsResponse = await axios.get(
           'http://localhost:5000/api/events',
-          { withCredentials: true }
+          axiosConfig
         );
         const allEvents = Array.isArray(allEventsResponse.data)
           ? allEventsResponse.data
@@ -41,7 +63,7 @@ function UserProfile() {
         const eventIdsResponse = await axios.post(
           'http://localhost:5000/api/user/events',
           { userId },
-          { withCredentials: true }
+          axiosConfig
         );
         const bookedEventIds = Array.isArray(eventIdsResponse.data.eventIds)
           ? eventIdsResponse.data.eventIds
@@ -57,12 +79,61 @@ function UserProfile() {
         console.error("Error fetching booked events:", error);
       }
     }
+
     if (userId) {
       fetchBookedEvents();
     }
   }, [userId]);
 
- 
+  // Fetch saved artists for the logged-in user
+  useEffect(() => {
+    async function fetchSavedArtists() {
+      try {
+        // First, get the list of saved artist IDs for the user
+        const response = await axios.get(
+          `http://localhost:5000/api/savedartist?userId=${userId}`,
+          axiosConfig
+        );
+        if (Array.isArray(response.data)) {
+          const artistIds = response.data.map((item: any) => item.artistId);
+
+          // Now, retrieve full artist details for each saved artist using the "api/artist" endpoint
+          const artistRequests = artistIds.map((id: string) =>
+            axios.get(`http://localhost:5000/api/artist/${id}`, axiosConfig)
+          );
+          const artistsResponses = await Promise.all(artistRequests);
+          const artistsData = artistsResponses.map((resp) => resp.data);
+          setSavedArtists(artistsData);
+        }
+      } catch (error) {
+        console.error("Error fetching saved artists:", error);
+      }
+    }
+    if (userId) {
+      fetchSavedArtists();
+    }
+  }, [userId]);
+
+  // If the user is an artist, fetch the queries sent to them.
+  useEffect(() => {
+    async function fetchQueries() {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/contact?artistId=${userId}`,
+          axiosConfig
+        );
+        if (Array.isArray(response.data)) {
+          setQueries(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching queries:", error);
+      }
+    }
+    if (userId && user.role === 'Artist') {
+      fetchQueries();
+    }
+  }, [userId, user]);
+
   return (
     <div className="bg-black min-h-screen py-8 md:py-12 lg:py-16">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -90,7 +161,7 @@ function UserProfile() {
               <nav className="space-y-1.5">
                 {[
                   { icon: User, label: 'Profile', active: true },
-                  { icon: Ticket, label: 'My Tickets' , path: '/create-event'},
+                  { icon: Ticket, label: 'My Tickets', path: '/create-event' },
                   { icon: Bell, label: 'Notifications' },
                   { icon: Settings, label: 'Settings' },
                 ].map((item, index) => (
@@ -101,6 +172,11 @@ function UserProfile() {
                         ? 'bg-purple-500/10 text-purple-400'
                         : 'text-gray-300 hover:bg-gray-700/50'
                     }`}
+                    onClick={() => {
+                      if (item.path) {
+                        navigate(item.path);
+                      }
+                    }}
                   >
                     <item.icon className="h-5 w-5 flex-shrink-0" />
                     <span className="text-sm font-medium">{item.label}</span>
@@ -108,19 +184,15 @@ function UserProfile() {
                 ))}
                 <button className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 transition-all">
                   <LogOut className="h-5 w-5 flex-shrink-0" />
-
-<Link to="/logout">
-  <span className="text-sm font-medium">Logout</span>
-</Link>
-
+                  <Link to="/logout" className="text-sm font-medium">
+                    Logout
+                  </Link>
                 </button>
                 <button className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 transition-all">
                   <Plus className="h-5 w-5 flex-shrink-0" />
-
-<Link to="/create-event">
-  <span className="text-sm font-medium">Create-Event</span>
-</Link>
-
+                  <Link to="/create-event" className="text-sm font-medium">
+                    Create Event
+                  </Link>
                 </button>
               </nav>
             </div>
@@ -153,7 +225,7 @@ function UserProfile() {
                             {new Date(event.date).toLocaleDateString('en-US', {
                               weekday: 'short',
                               month: 'short',
-                              day: 'numeric'
+                              day: 'numeric',
                             })}
                           </div>
                           <div className="flex items-center gap-2 text-sm text-gray-400 mt-1">
@@ -162,7 +234,7 @@ function UserProfile() {
                           </div>
                         </div>
                         <button className="mt-2 md:mt-0 px-4 py-2 bg-purple-500/10 text-purple-400 rounded-lg hover:bg-purple-500/20 transition-all flex items-center gap-2">
-                          <button className="h-4 w-4" />
+                          <span className="h-4 w-4" />
                           View Ticket
                         </button>
                       </div>
@@ -184,25 +256,75 @@ function UserProfile() {
                 <span>Saved Artists</span>
               </h3>
               <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-                {userProfile.savedArtists.map((artist: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined, index: React.Key | null | undefined) => (
-                  <div key={index} className="bg-gray-800 rounded-xl p-4 hover:bg-gray-700/50 transition-all">
-                    <div className="flex items-center gap-3">
-                      <div className="flex-shrink-0">
-                        <div className="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center">
-                          <User className="h-5 w-5 text-purple-400" />
+                {savedArtists.length > 0 ? (
+                  savedArtists.map((artist, index) => (
+                    <div key={index} className="bg-gray-800 rounded-xl p-4 hover:bg-gray-700/50 transition-all">
+                      <div className="flex items-center gap-3">
+                        <div className="flex-shrink-0">
+                          {artist.avatars && artist.avatars.length > 0 ? (
+                            <img
+                              src={artist.avatars[0]}
+                              alt={artist.username}
+                              className="w-10 h-10 rounded-full"
+                            />
+                          ) : (
+                            <div className="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center">
+                              <User className="h-5 w-5 text-purple-400" />
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-medium">{artist.username}</h4>
+                          <Link
+                            to={`/artist/${artist._id}`}
+                            className="text-purple-400 hover:text-purple-300 text-sm mt-1 transition-colors"
+                          >
+                            View Profile →
+                          </Link>
                         </div>
                       </div>
-                      <div className="flex-1">
-                        <h4 className="font-medium">{artist}</h4>
-                        <button className="text-purple-400 hover:text-purple-300 text-sm mt-1 transition-colors">
-                          View Profile →
-                        </button>
-                      </div>
                     </div>
+                  ))
+                ) : (
+                  <div className="text-center py-8">
+                    <div className="text-gray-400 mb-2">No saved artists</div>
+                    <p className="text-sm text-gray-500">Your saved artists will appear here</p>
                   </div>
-                ))}
+                )}
               </div>
             </div>
+
+            {/* Queries Section (Visible only if user is an artist) */}
+            {user?.role === 'Artist' && (
+              <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-6 shadow-xl">
+                <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
+                  <Bell className="h-6 w-6 text-purple-400" />
+                  <span>Queries</span>
+                </h3>
+                <div className="grid gap-4">
+                  {queries.length > 0 ? (
+                    queries.map((query, index) => (
+                      <div key={index} className="bg-gray-800 rounded-xl p-4 hover:bg-gray-700/50 transition-all">
+                        <h4 className="font-semibold text-lg">
+                          {query.subject || "No Subject"}
+                        </h4>
+                        <p className="text-gray-400 text-sm mt-1">{query.message}</p>
+                        <p className="text-gray-500 text-xs mt-1">
+                          From: {query.senderEmail || "Anonymous"}
+                        </p>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-8">
+                      <div className="text-gray-400 mb-2">No queries</div>
+                      <p className="text-sm text-gray-500">
+                        No queries have been sent yet
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
 
             {/* Preferences */}
             <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-6 shadow-xl">
@@ -218,10 +340,10 @@ function UserProfile() {
                   <div key={index} className="flex items-center justify-between bg-gray-700/30 rounded-lg p-4">
                     <span className="text-gray-300">{pref.label}</span>
                     <label className="relative inline-flex items-center cursor-pointer">
-                      <input 
-                        type="checkbox" 
-                        className="sr-only peer" 
-                        defaultChecked={pref.checked} 
+                      <input
+                        type="checkbox"
+                        className="sr-only peer"
+                        defaultChecked={pref.checked}
                       />
                       <div className="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-purple-500 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all" />
                     </label>

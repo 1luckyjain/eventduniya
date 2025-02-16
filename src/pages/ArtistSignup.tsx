@@ -1,14 +1,24 @@
 // src/pages/ArtistSignup.tsx
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-// Update the import line at the top of the file
-import { 
-  Mail, Lock, User, MapPin, Phone, Tag, Video, Instagram, Twitter, Youtube, 
-  Facebook, Music, AlertCircle, ArrowRight  // Add AlertCircle here
+import {
+  Mail,
+  Lock,
+  User,
+  MapPin,
+  Phone,
+  Tag,
+  Video,
+  Instagram,
+  Twitter,
+  Youtube,
+  Facebook,
+  Music,
+  AlertCircle,
+  ArrowRight,
 } from "lucide-react";
-
 import { useAuth } from "../context/auth-context";
 import { STATUS } from "../utils/utils";
 
@@ -28,17 +38,17 @@ interface ArtistSignupFormValues {
   videoLink2?: string;
   videoLink3?: string;
   instagram: string;
-  twitter?: string;
-  youtube?: string;
-  facebook?: string;
-  tiktok?: string;
+  twitter: string;
+  youtube: string;
+  facebook: string;
+  tiktok: string;
 }
 
 const ArtistSignup: React.FC = () => {
   const {
     handleSubmit,
     register,
-    formState: { errors, touchedFields },
+    formState: { errors },
     getValues,
   } = useForm<ArtistSignupFormValues>({
     defaultValues: {
@@ -68,18 +78,98 @@ const ArtistSignup: React.FC = () => {
   const navigate = useNavigate();
   const { login, setAuthenticationStatus } = useAuth();
 
+  // States for the three image uploads
+  const [avatarUrl, setAvatarUrl] = useState<string>("");
+  const [imageUrl, setImageUrl] = useState<string>("");
+  const [image1Url, setImage1Url] = useState<string>("");
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
+  // Function to upload a file using your presigned URL endpoint
+  const uploadFile = async (
+    file: File,
+    field: "avatar" | "image" | "image1"
+  ) => {
+    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+    try {
+      // Request a presigned URL from the backend
+      const res = await fetch(`${API_URL}/api/image/upload`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // Include Authorization header if required
+        },
+        body: JSON.stringify({
+          imageName: file.name,
+          imageType: file.type,
+          // For signup, you might not have a user id yet
+        }),
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(
+          `Failed to get upload URL. Status: ${res.status}. Response: ${text}`
+        );
+      }
+
+      const data = await res.json();
+      if (!data.uploadUrl) {
+        throw new Error("Could not get upload URL");
+      }
+
+      // Upload file directly to S3 using the presigned URL
+      const uploadRes = await fetch(data.uploadUrl, {
+        method: "PUT",
+        headers: {
+          "Content-Type": file.type,
+        },
+        body: file,
+      });
+      if (!uploadRes.ok) {
+        throw new Error("Failed to upload image to S3");
+      }
+
+      // Update the corresponding state with the returned image URL
+      if (field === "avatar") {
+        setAvatarUrl(data.imageUrl);
+      } else if (field === "image") {
+        setImageUrl(data.imageUrl);
+      } else if (field === "image1") {
+        setImage1Url(data.imageUrl);
+      }
+    } catch (err: any) {
+      console.error("Error uploading file:", err);
+      setUploadError(err.message || "Error uploading file");
+    }
+  };
+
+  // Handler for file input changes
+  const handleFileChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: "avatar" | "image" | "image1"
+  ) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      await uploadFile(file, field);
+    }
+  };
+
   const onSubmit = async (values: ArtistSignupFormValues) => {
-    // Ensure passwords match (react-hook-form validation already handles this)
+    // Ensure passwords match
     if (values.password !== values.confirmPassword) {
       return;
     }
 
-    // Create the newArtist object matching your Artist schema
+    // Collect all uploaded image URLs into an array
+    const avatars = [avatarUrl, imageUrl, image1Url].filter((url) => url);
+
+    // Create the newArtist object matching your updated Artist schema
     const newArtist = {
       username: values.username,
       email: values.email,
       password: values.password,
-      role: "Artist",
+      role: "artist",
+      avatars, // All image URLs are stored here
       city: values.city,
       state: values.state,
       country: values.country,
@@ -102,21 +192,22 @@ const ArtistSignup: React.FC = () => {
       const response = await axios.post(
         "http://localhost:5000/api/auth/signup",
         newArtist,
-        { withCredentials: true }
+        {withCredentials : true}
       );
       setAuthenticationStatus(STATUS.SUCCEEDED);
       console.log("Signup response:", response.data);
       const { user, token, expiresAt } = response.data;
       login(user, token, expiresAt);
-      navigate("/");
+      navigate("/")
     } catch (error: any) {
       console.error("Signup error:", error);
       setAuthenticationStatus(STATUS.FAILED);
-      // Optionally, display an error message here
+      // Optionally display an error message here
     }
   };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br text-black from-purple-50 to-indigo-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           {/* Header Section */}
@@ -136,9 +227,11 @@ const ArtistSignup: React.FC = () => {
                 <div className="space-y-4">
                   <div className="flex items-center space-x-3">
                     <User className="w-6 h-6 text-purple-600" />
-                    <h2 className="text-xl font-semibold">Personal Information</h2>
+                    <h2 className="text-xl font-semibold">
+                      Personal Information
+                    </h2>
                   </div>
-                  
+
                   <InputField
                     icon={<User size={18} className="text-black" />}
                     label="Username"
@@ -156,9 +249,10 @@ const ArtistSignup: React.FC = () => {
                     type="email"
                     register={register}
                     error={errors.email}
-                    validation={{ 
-                      required: true, 
-                      pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ 
+                    validation={{
+                      required: true,
+                      pattern:
+                        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                     }}
                     placeholder="artist@example.com"
                   />
@@ -188,7 +282,11 @@ const ArtistSignup: React.FC = () => {
                     type="password"
                     register={register}
                     error={errors.confirmPassword}
-                    validation={{ required: true, validate: (value: string) => value === getValues("password") }}
+                    validation={{
+                      required: true,
+                      validate: (value: string) =>
+                        value === getValues("password"),
+                    }}
                     placeholder="••••••••"
                   />
                 </div>
@@ -271,7 +369,10 @@ const ArtistSignup: React.FC = () => {
                   />
 
                   <div className="relative">
-                    <label htmlFor="bio" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label
+                      htmlFor="bio"
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
                       Bio
                     </label>
                     <textarea
@@ -286,13 +387,98 @@ const ArtistSignup: React.FC = () => {
                 </div>
               </div>
 
+              {/* Profile Images Section */}
+              <div className="space-y-4">
+                <div className="flex items-center space-x-3">
+                  <Music className="w-6 h-6 text-purple-600" />
+                  <h2 className="text-xl font-semibold">Profile Images</h2>
+                </div>
+                <div className="grid md:grid-cols-3 gap-6">
+                  {/* Avatar Image */}
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Avatar Image
+                    </label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleFileChange(e, "avatar")}
+                      className="block w-full text-sm text-gray-500
+                        file:mr-4 file:py-2 file:px-4
+                        file:rounded-md file:border-0
+                        file:text-sm file:font-semibold
+                        file:bg-purple-600 file:text-white
+                        hover:file:bg-purple-700"
+                    />
+                    {avatarUrl && (
+                      <img
+                        src={avatarUrl}
+                        alt="Avatar Preview"
+                        className="mt-2 h-20 object-contain rounded"
+                      />
+                    )}
+                  </div>
+                  {/* Second Image */}
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Second Image
+                    </label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleFileChange(e, "image")}
+                      className="block w-full text-sm text-gray-500
+                        file:mr-4 file:py-2 file:px-4
+                        file:rounded-md file:border-0
+                        file:text-sm file:font-semibold
+                        file:bg-purple-600 file:text-white
+                        hover:file:bg-purple-700"
+                    />
+                    {imageUrl && (
+                      <img
+                        src={imageUrl}
+                        alt="Second Image Preview"
+                        className="mt-2 h-20 object-contain rounded"
+                      />
+                    )}
+                  </div>
+                  {/* Third Image */}
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Third Image
+                    </label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleFileChange(e, "image1")}
+                      className="block w-full text-sm text-gray-500
+                        file:mr-4 file:py-2 file:px-4
+                        file:rounded-md file:border-0
+                        file:text-sm file:font-semibold
+                        file:bg-purple-600 file:text-white
+                        hover:file:bg-purple-700"
+                    />
+                    {image1Url && (
+                      <img
+                        src={image1Url}
+                        alt="Third Image Preview"
+                        className="mt-2 h-20 object-contain rounded"
+                      />
+                    )}
+                  </div>
+                </div>
+                {uploadError && (
+                  <p className="text-red-500 text-sm">{uploadError}</p>
+                )}
+              </div>
+
               {/* Video Links Section */}
               <div className="space-y-4">
                 <div className="flex items-center space-x-3 border-b pb-2">
                   <Video className="w-6 h-6 text-purple-600" />
                   <h2 className="text-xl font-semibold">Portfolio Videos</h2>
                 </div>
-                
+
                 <InputField
                   label="Video Link 1 (Required)"
                   id="videoLink1"
@@ -367,14 +553,14 @@ const ArtistSignup: React.FC = () => {
                   type="submit"
                   className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-4 px-6 rounded-lg font-semibold hover:shadow-lg transition-all hover:scale-[1.02] flex items-center justify-center gap-2"
                 >
-                  <button className="w-5 h-5" />
+                  <ArrowRight className="w-5 h-5" />
                   Complete Artist Registration
                 </button>
 
                 <p className="text-center text-gray-600 mt-4">
                   Already have an account?{" "}
-                  <Link 
-                    to="/login" 
+                  <Link
+                    to="/login"
                     className="text-purple-600 font-semibold hover:underline hover:text-purple-700"
                   >
                     Sign in here
@@ -415,8 +601,8 @@ const InputField = ({
         type={type}
         {...register(id, validation)}
         placeholder={placeholder}
-        className={`w-full px-4 ${icon ? 'pl-10' : 'pl-4'} py-3 border ${
-          error ? 'border-red-500' : 'border-gray-300'
+        className={`w-full px-4 ${icon ? "pl-10" : "pl-4"} py-3 border ${
+          error ? "border-red-500" : "border-gray-300"
         } rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent`}
       />
     </div>
@@ -424,7 +610,7 @@ const InputField = ({
   </div>
 );
 
-//Error Message Component
+// Error Message Component
 const ErrorText = ({ message }: { message?: string }) => (
   <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
     <AlertCircle className="w-4 h-4" />

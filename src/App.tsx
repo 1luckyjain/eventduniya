@@ -115,9 +115,7 @@ const App: React.FC = () => {
                   <Link to="/login" className="hover:text-purple-500 transition">
                     Login
                   </Link>
-                  <Link to="/artistsignup" className="hover:text-purple-500 transition">
-                    ArtistSignup
-                  </Link>
+          
                 </>
               )}
             </div>
@@ -202,13 +200,7 @@ const App: React.FC = () => {
                       >
                         Login
                       </Link>
-                      <Link
-                        to="/artistsignup"
-                        className="hover:text-purple-500 transition"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        ArtistSignup
-                      </Link>
+                      
                     </>
                   )}
                 </div>
