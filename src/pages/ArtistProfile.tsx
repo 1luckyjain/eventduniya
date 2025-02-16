@@ -74,7 +74,7 @@ const ArtistProfile: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const auth = useAuth();
   const token = auth.token;
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+  const API_URL = import.meta.env.VITE_API_URL || 'https://eventduniya-server.onrender.com';
 
   // States for rating & review
   const [review, setReview] = useState<string>('');

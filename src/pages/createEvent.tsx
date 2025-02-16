@@ -68,7 +68,7 @@ const CreateEvent: React.FC = () => {
     file: File,
     field: 'image' | 'image1' | 'image2'
   ) => {
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    const API_URL = import.meta.env.VITE_API_URL || 'https://eventduniya-server.onrender.com';
     try {
       // Request presigned URL from backend
       const res = await fetch(`${API_URL}/api/image/upload`, {
@@ -139,7 +139,7 @@ const CreateEvent: React.FC = () => {
     };
 
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const API_URL = import.meta.env.VITE_API_URL || 'https://eventduniya-server.onrender.com';
       const response = await fetch(`${API_URL}/api/events`, {
         method: 'POST',
         headers: {

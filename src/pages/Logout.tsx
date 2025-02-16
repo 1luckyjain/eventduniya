@@ -7,7 +7,7 @@ import { useAuth } from '../context/auth-context';
 const Logout: React.FC = () => {
   const { logout, token } = useAuth();
   const navigate = useNavigate();
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+  const API_URL = import.meta.env.VITE_API_URL || 'https://eventduniya-server.onrender.com';
 
   useEffect(() => {
     axios

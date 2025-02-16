@@ -17,7 +17,7 @@ import { useAuth } from '../context/auth-context';
 const ArtistRating = ({ artistId }: { artistId: string }) => {
   const [averageRating, setAverageRating] = useState(0);
   const [loading, setLoading] = useState(true);
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+  const API_URL = import.meta.env.VITE_API_URL || 'https://eventduniya-server.onrender.com';
 
   useEffect(() => {
     axios
@@ -86,7 +86,7 @@ function Artist() {
   const [dynamicArtists, setDynamicArtists] = useState([]);
   const [savedArtistIds, setSavedArtistIds] = useState<string[]>([]);
   const navigate = useNavigate();
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+  const API_URL = import.meta.env.VITE_API_URL || 'https://eventduniya-server.onrender.com';
 
   // Navigation when clicking on an artist
   const handleOnClick = (id: string) => {
@@ -220,12 +220,12 @@ function Artist() {
                     alt={artist.username}
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
                 </div>
 
                 <div className="p-6 md:p-8 absolute bottom-0 left-0 right-0">
                   <div className="mb-4">
-                    <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                    <h3 className="text-2xl md:text-3xl font-bold text-white mb-2 drop-shadow-lg">
                       {artist.username}
                     </h3>
                     <p className="text-purple-400 font-medium">{artist.tag}</p>

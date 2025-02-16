@@ -89,7 +89,7 @@ const ArtistSignup: React.FC = () => {
     file: File,
     field: "avatar" | "image" | "image1"
   ) => {
-    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+    const API_URL = import.meta.env.VITE_API_URL || "https://eventduniya-server.onrender.com";
     try {
       // Request a presigned URL from the backend
       const res = await fetch(`${API_URL}/api/image/upload`, {
@@ -190,7 +190,7 @@ const ArtistSignup: React.FC = () => {
     try {
       setAuthenticationStatus(STATUS.PENDING);
       const response = await axios.post(
-        "http://localhost:5000/api/auth/signup",
+        "https://eventduniya-server.onrender.com/api/auth/signup",
         newArtist,
         {withCredentials : true}
       );

@@ -52,7 +52,7 @@ function UserProfile() {
       try {
         // 1. Fetch all events from the API.
         const allEventsResponse = await axios.get(
-          'http://localhost:5000/api/events',
+          'https://eventduniya-server.onrender.com/api/events',
           axiosConfig
         );
         const allEvents = Array.isArray(allEventsResponse.data)
@@ -61,7 +61,7 @@ function UserProfile() {
 
         // 2. Fetch booked event IDs for the user.
         const eventIdsResponse = await axios.post(
-          'http://localhost:5000/api/user/events',
+          'https://eventduniya-server.onrender.com/api/user/events',
           { userId },
           axiosConfig
         );
@@ -91,7 +91,7 @@ function UserProfile() {
       try {
         // First, get the list of saved artist IDs for the user
         const response = await axios.get(
-          `http://localhost:5000/api/savedartist?userId=${userId}`,
+          `https://eventduniya-server.onrender.com/api/savedartist?userId=${userId}`,
           axiosConfig
         );
         if (Array.isArray(response.data)) {
@@ -99,7 +99,7 @@ function UserProfile() {
 
           // Now, retrieve full artist details for each saved artist using the "api/artist" endpoint
           const artistRequests = artistIds.map((id: string) =>
-            axios.get(`http://localhost:5000/api/artist/${id}`, axiosConfig)
+            axios.get(`https://eventduniya-server.onrender.com/api/artist/${id}`, axiosConfig)
           );
           const artistsResponses = await Promise.all(artistRequests);
           const artistsData = artistsResponses.map((resp) => resp.data);
@@ -119,7 +119,7 @@ function UserProfile() {
     async function fetchQueries() {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/contact?artistId=${userId}`,
+          `https://eventduniya-server.onrender.com/api/contact?artistId=${userId}`,
           axiosConfig
         );
         if (Array.isArray(response.data)) {

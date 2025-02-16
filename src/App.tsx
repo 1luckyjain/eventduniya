@@ -40,7 +40,7 @@ const App: React.FC = () => {
   const refreshAccessToken = useCallback(async () => {
     try {
       const response = await axios.post(
-        'http://localhost:5000/api/auth/refresh',
+        'https://eventduniya-server.onrender.com/api/auth/refresh',
         {},
         { withCredentials: true }
       );

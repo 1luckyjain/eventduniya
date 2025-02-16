@@ -30,7 +30,7 @@ function Events() {
 
   // Fetch dynamic events
   useEffect(() => {
-    fetch('http://localhost:5000/api/events/')
+    fetch('https://eventduniya-server.onrender.com/api/events/')
       .then((response) => response.json())
       .then((data) => {
         const eventsArray = Array.isArray(data) ? data : data.events || [];
@@ -51,7 +51,7 @@ function Events() {
     async function fetchUserBookedEvents() {
       try {
         const response = await axios.post(
-          'http://localhost:5000/api/user/events',
+          'https://eventduniya-server.onrender.com/api/user/events',
           { userId },
           axiosConfig
         );
@@ -78,7 +78,7 @@ function Events() {
     try {
       const payload = { userId, eventId: _id };
       const response = await axios.post(
-        `http://localhost:5000/api/bookticket/${_id}`,
+        `https://eventduniya-server.onrender.com/api/bookticket/${_id}`,
         payload,
         axiosConfig
       );

@@ -27,7 +27,7 @@ const Login: React.FC = () => {
     try {
       setAuthenticationStatus(STATUS.PENDING);
       const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        "https://eventduniya-server.onrender.com/api/auth/login",
         {
           username: values.username,
           password: values.password,

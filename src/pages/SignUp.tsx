@@ -38,7 +38,7 @@ const Signup: React.FC = () => {
     try {
       setAuthenticationStatus(STATUS.PENDING);
       const response = await axios.post(
-        "http://localhost:5000/api/auth/signup",
+        "https://eventduniya-server.onrender.com/api/auth/signup",
         {
           username: values.username,
           email: values.email,
@@ -61,7 +61,7 @@ const Signup: React.FC = () => {
 
   const handleGoogleSuccess = (credentialResponse: any) => {
     axios.post(
-      "http://localhost:5000/api/auth/google", 
+      "https://eventduniya-server.onrender.com/api/auth/google", 
       { credential: credentialResponse.credential }, 
       { withCredentials: true }
     )
