@@ -108,6 +108,8 @@ const ArtistProfile: React.FC = () => {
     fetch(`${API_URL}/api/artist/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
+         'Content-Type': 'application/json',
+    'Origin': 'https://www.eventduniya.com'
       },
       credentials: 'include',
     })

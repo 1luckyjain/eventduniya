@@ -161,7 +161,7 @@ function UserProfile() {
               <nav className="space-y-1.5">
                 {[
                   { icon: User, label: 'Profile', active: true },
-                  { icon: Ticket, label: 'My Tickets', path: '/events' },
+                  { icon: Ticket, label: 'Create Events', path: '/create-event' },
                   { icon: Bell, label: 'Notifications' },
                   { icon: Settings, label: 'Settings' },
                 ].map((item, index) => (
