@@ -169,13 +169,13 @@ const App: React.FC = () => {
                       >
                         {user.username}
                       </Link>
-                      <Link
+                      {/* <Link
                         to="/create-event"
                         className="hover:text-purple-500 transition"
                         onClick={() => setIsMenuOpen(false)}
                       >
                         Create Event
-                      </Link>
+                      </Link> */}
                       {/* <Link
                         to="/logout"
                         className="hover:text-purple-500 transition"
