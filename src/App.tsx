@@ -168,13 +168,24 @@ const App: React.FC = () => {
                       >
                         {user.username}
                       </Link>
-                      <Link
+                      {/* <Link
                         to="/create-event"
                         className="hover:text-purple-500 transition"
                         onClick={() => setIsMenuOpen(false)}
                       >
                         Create Event
+<<<<<<< HEAD
                       </Link>
+=======
+                      </Link> */}
+                      {/* <Link
+                        to="/logout"
+                        className="hover:text-purple-500 transition"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        Logout
+                      </Link> */}
+>>>>>>> 1fddeda49a391c84529f7d23078b38527d841f8a
                     </>
                   ) : (
                     <>

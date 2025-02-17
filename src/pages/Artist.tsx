@@ -71,7 +71,7 @@ function Artist() {
       avatars: [
         'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=500',
       ],
-      tag: 'Visual Artist',
+      tag: 'Dummy Artist Profile',
       bio: 'Mixed-media artist whose work explores the intersection of nature and technology.',
       instagram: '#',
       twitter: '#',
