@@ -6,7 +6,6 @@ import {
   Route,
   Link,
   Navigate,
-  useNavigate,
 } from 'react-router-dom';
 import axios from 'axios';
 import { Menu, X } from 'lucide-react';
@@ -36,7 +35,7 @@ const App: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const { token, user, login, logout, isAuthenticated, expiresAt } = useAuth();
 
-  // Function to refresh the access token
+  // Function to refresh the access token and store it in localStorage
   const refreshAccessToken = useCallback(async () => {
     try {
       const response = await axios.post(
@@ -45,9 +44,12 @@ const App: React.FC = () => {
         { withCredentials: true }
       );
       const { user: refreshedUser, accessToken, expiresAt: refreshedExpiresAt } = response.data;
+
       if (response.status === 204) {
         logout();
       } else {
+        // Store the new token in localStorage
+        localStorage.setItem('token', accessToken);
         login(refreshedUser, accessToken, refreshedExpiresAt);
       }
     } catch (error) {
@@ -103,9 +105,7 @@ const App: React.FC = () => {
                   <Link to="/create-event" className="hover:text-purple-500 transition">
                     Create Event
                   </Link>
-                  {/* <Link to="/logout" className="hover:text-purple-500 transition">
-                    Logout
-                  </Link> */}
+                  {/* You can also add a Logout link here */}
                 </>
               ) : (
                 <>
@@ -115,7 +115,6 @@ const App: React.FC = () => {
                   <Link to="/login" className="hover:text-purple-500 transition">
                     Login
                   </Link>
-          
                 </>
               )}
             </div>
@@ -176,13 +175,6 @@ const App: React.FC = () => {
                       >
                         Create Event
                       </Link>
-                      {/* <Link
-                        to="/logout"
-                        className="hover:text-purple-500 transition"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        Logout
-                      </Link> */}
                     </>
                   ) : (
                     <>
@@ -200,7 +192,6 @@ const App: React.FC = () => {
                       >
                         Login
                       </Link>
-                      
                     </>
                   )}
                 </div>
@@ -288,7 +279,7 @@ const App: React.FC = () => {
                 <h4 className="font-semibold mb-4">Contact Info</h4>
                 <ul className="space-y-2 text-gray-400">
                   <li>Jaipur</li>
-                  <li>Rajasthan,India</li>
+                  <li>Rajasthan, India</li>
                   <li>eventduniyaa@gmail.com</li>
                   <li>+91 8435308486</li>
                 </ul>
@@ -296,7 +287,10 @@ const App: React.FC = () => {
               <div>
                 <h4 className="font-semibold mb-4">Follow Us</h4>
                 <div className="flex space-x-4">
-                  <a href="https://www.instagram.com/eventduniyaofficial/" className="text-gray-400 hover:text-purple-500">
+                  <a
+                    href="https://www.instagram.com/eventduniyaofficial/"
+                    className="text-gray-400 hover:text-purple-500"
+                  >
                     Instagram
                   </a>
                   <a href="#" className="text-gray-400 hover:text-purple-500">
