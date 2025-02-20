@@ -9,11 +9,11 @@ function Events() {
   const staticEvents = [
     {
       _id: 'static-4',
-      title: "Art Gallery Opening",
+      title: "Dummy event ",
       date: "2025-08-01",
       time: "5:00 PM",
       location: "Metropolitan Gallery",
-      city: "Chicago",
+      city: "location",
       image: "https://images.unsplash.com/photo-1531243269054-5ebf6f34081e?auto=format&fit=crop&w=800",
       description: "Opening night featuring works from emerging contemporary artists.",
       type: "Exhibition",
