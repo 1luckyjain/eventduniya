@@ -174,9 +174,6 @@ const App: React.FC = () => {
                         onClick={() => setIsMenuOpen(false)}
                       >
                         Create Event
-<<<<<<< HEAD
-                      </Link>
-=======
                       </Link> */}
                       {/* <Link
                         to="/logout"
@@ -185,7 +182,6 @@ const App: React.FC = () => {
                       >
                         Logout
                       </Link> */}
->>>>>>> 1fddeda49a391c84529f7d23078b38527d841f8a
                     </>
                   ) : (
                     <>
